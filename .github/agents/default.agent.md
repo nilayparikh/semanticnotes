@@ -1,5 +1,5 @@
 ---
-name: semanticnotes-plan-agent
+name: sn_agent
 description: "Planning agent for SemanticNotes.ai. Handles task breakdown, TDD verification, and skill orchestration."
 tools:
   - vscode

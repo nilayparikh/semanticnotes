@@ -1,15 +1,50 @@
-# SemanticNotes.ai — Plans
+# SemanticNotes.ai — Phase Plans Index
 
-This directory contains all implementation plans for SemanticNotes.ai features, epics, and workstreams.
+This directory contains all implementation phase plans for SemanticNotes.ai. Each plan is scoped to 4-6 Story Points for TDD manageability.
 
-## Plan File Naming Convention
+## Phase Plan Structure
 
 ```
-docs/plans/NN_plan-name.md
+docs/plans/
+├── README.md                    # This index
+├── 00_project-setup.md          # Phase 00: Project scaffolding
+├── 01a_worker-runtime.md        # Phase 01a: Worker messaging
+├── 01b_data-model-layer.md      # Phase 01b: Data & model runtime
+├── 02a_note-crud.md             # Phase 02a: Note CRUD
+├── 02b_note-ui.md               # Phase 02b: Note UI components
+├── 03a_embedding-pipeline.md   # Phase 03a: Embedding computation
+├── 03b_semantic-search.md       # Phase 03b: Semantic search hook
+├── 04a_rag-pipeline.md          # Phase 04a: RAG pipeline
+├── 04b_chat-ui.md               # Phase 04b: Chat UI
+├── 05a_layout-structure.md      # Phase 05a: Layout grid
+└── 05b_ui-indicators.md         # Phase 05b: UI indicators
 ```
 
-- `NN` is a sequential number (e.g., `01_semantic-search`, `02_note-editor`).
-- Use kebab-case for readability.
+## Phase Plan Naming Convention
+
+```
+docs/plans/NNx_plan-name.md
+```
+
+- `NN` is the phase number (00–05)
+- `x` is the sub-phase letter (a, b) when split from a larger feature
+- Use kebab-case for readability
+
+## Phase Plan Dependencies
+
+```
+Phase 00 (Project Setup)
+  └── 01a (Worker Runtime)
+       └── 01b (Data & Model Layer)
+            └── 02a (Note CRUD)
+                 └── 02b (Note UI)
+                      └── 03a (Embedding Pipeline)
+                           └── 03b (Semantic Search)
+                                └── 04a (RAG Pipeline)
+                                     └── 04b (Chat UI)
+                                          └── 05a (Layout Structure)
+                                               └── 05b (UI Indicators)
+```
 
 ## Plan Template
 
@@ -49,13 +84,15 @@ Every plan must follow the structure below. Copy the template below for a new pl
 | 2   | [Description] | `[ ]`  |
 | 3   | [Description] | `[ ]`  |
 
-## 4. Task Tracker
+## 4. TDD Test Cases
 
-| #   | Task               | Dependencies | Status | Notes |
-| --- | ------------------ | ------------ | ------ | ----- |
-| 1   | [Task description] | —            | `[ ]`  |       |
-| 2   | [Task description] | #1           | `[ ]`  |       |
-| 3   | [Task description] | #1, #2       | `[ ]`  |       |
+### Test Suite: [Name]
+
+```typescript
+describe("[Test Name]", () => {
+  it("should [test case]", () => {});
+});
+```
 
 ## 5. Technical Approach
 
@@ -63,8 +100,7 @@ Every plan must follow the structure below. Copy the template below for a new pl
 
 ## 6. Dependencies
 
-- [ ] [Library / Module / Service]
-- [ ] [Library / Module / Service]
+- [ ] [Phase Plan / Library / Module]
 
 ## 7. Risks & Mitigations
 
@@ -74,11 +110,9 @@ Every plan must follow the structure below. Copy the template below for a new pl
 
 ## 8. Test Strategy
 
-| Test Type   | Scope                  | Location        |
-| ----------- | ---------------------- | --------------- |
-| Unit        | [Component / Function] | `tests/...`     |
-| Integration | [Worker / Hook]        | `tests/...`     |
-| E2E         | [Playwright scenario]  | `tests/e2e/...` |
+| Test Type | Scope                  | Location    |
+| --------- | ---------------------- | ----------- |
+| Unit      | [Component / Function] | `tests/...` |
 
 ## 9. Files to Create / Modify
 
@@ -99,12 +133,3 @@ Every plan must follow the structure below. Copy the template below for a new pl
 ## Archive
 
 Completed plans may be moved to `docs/plans/archive/` to keep the root list lean.
-
-```
-docs/plans/
-├── README.md
-├── 01_feature-name.md
-├── 02_feature-name.md
-└── archive/
-    └── 00_completed-feature.md
-```
