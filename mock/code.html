@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SemanticNotes AI Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#00a572",
+                        "on-background": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "primary-fixed": "#7df4ff",
+                        "primary-fixed-dim": "#00dbe9",
+                        "on-surface": "#e5e2e1",
+                        "surface-bright": "#3a3939",
+                        "surface-container": "#201f1f",
+                        "inverse-surface": "#e5e2e1",
+                        "tertiary": "#f3f6ff",
+                        "surface": "#131313",
+                        "error": "#ffb4ab",
+                        "on-tertiary-container": "#506076",
+                        "on-secondary-container": "#00311f",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "primary-container": "#00f0ff",
+                        "background": "#131313",
+                        "error-container": "#93000a",
+                        "surface-dim": "#131313",
+                        "surface-container-highest": "#353534",
+                        "tertiary-fixed": "#d3e4fe",
+                        "on-error": "#690005",
+                        "on-tertiary": "#213145",
+                        "secondary-fixed": "#6ffbbe",
+                        "outline-variant": "#3b494b",
+                        "primary": "#dbfcff",
+                        "on-surface-variant": "#b9cacb",
+                        "on-secondary": "#003824",
+                        "on-primary-fixed": "#002022",
+                        "on-secondary-fixed-variant": "#005236",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "outline": "#849495",
+                        "inverse-on-surface": "#313030",
+                        "tertiary-container": "#cadbf5",
+                        "on-primary": "#00363a",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "inverse-primary": "#006970",
+                        "surface-variant": "#353534",
+                        "on-primary-container": "#006970",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#4edea3",
+                        "secondary": "#4edea3",
+                        "surface-tint": "#00dbe9",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary-fixed-variant": "#004f54",
+                        "on-secondary-fixed": "#002113"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-desktop": "32px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-md": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "body-base": ["Geist"],
+                        "status-pill": ["Geist"],
+                        "code-editor": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["11px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "status-pill": ["12px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "code-editor": ["14px", { "lineHeight": "1.7", "letterSpacing": "0em", "fontWeight": "450" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(28, 27, 27, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .ai-glow {
+            box-shadow: 0 0 15px rgba(0, 219, 233, 0.15);
+        }
+        /* Custom Scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] text-on-surface font-body-base text-body-base h-screen overflow-hidden flex flex-col">
+<!-- Global Header -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-16 z-50 bg-surface/80 backdrop-blur-xl border-b border-white/10 shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed-dim" style="font-variation-settings: 'FILL' 1;">note_stack</span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">SemanticNotes AI</span>
+</div>
+<div class="flex items-center gap-4">
+<!-- Status Badges -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-secondary/30 bg-secondary/10">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="font-status-pill text-status-pill text-secondary">WebGPU Active</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary-fixed-dim/30 bg-primary-fixed-dim/10">
+<span class="material-symbols-outlined text-[14px] text-primary-fixed-dim">save</span>
+<span class="font-status-pill text-status-pill text-primary-fixed-dim">SQLite Connected: 24MB</span>
+</div>
+<div class="flex items-center gap-2 ml-4 border-l border-white/10 pl-4">
+<button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors rounded-DEFAULT">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-colors rounded-DEFAULT">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Workspace -->
+<main class="flex flex-1 overflow-hidden">
+<!-- Left Column: Knowledge Base -->
+<aside class="w-[20%] min-w-[240px] max-w-[320px] flex flex-col h-full border-r border-white/10 glass-panel z-10 shrink-0">
+<div class="p-4 border-b border-white/10">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full bg-surface-container-highest border-0 rounded-lg pl-9 pr-4 py-2 text-body-base text-on-surface placeholder:text-on-surface-variant focus:ring-1 focus:ring-primary-fixed-dim focus:outline-none transition-all group-focus-within:ai-glow" placeholder="AI Semantic Search..." type="text"/>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto py-2">
+<nav class="flex flex-col px-2 gap-1">
+<div class="px-2 py-3 bg-secondary-container/20 text-secondary border-r-2 border-secondary rounded-l-DEFAULT cursor-pointer flex items-center justify-between group">
+<div class="flex items-center gap-3 truncate">
+<span class="material-symbols-outlined text-[18px]">description</span>
+<span class="truncate">Project Ideas for 2026</span>
+</div>
+<span class="font-status-pill text-status-pill opacity-70">Just now</span>
+</div>
+<div class="px-2 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all duration-200 rounded-DEFAULT cursor-pointer flex items-center justify-between group">
+<div class="flex items-center gap-3 truncate">
+<span class="material-symbols-outlined text-[18px]">description</span>
+<span class="truncate">SQLite WASM Setup</span>
+</div>
+<span class="font-status-pill text-status-pill opacity-50">2h</span>
+</div>
+<div class="px-2 py-3 text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all duration-200 rounded-DEFAULT cursor-pointer flex items-center justify-between group">
+<div class="flex items-center gap-3 truncate">
+<span class="material-symbols-outlined text-[18px]">list_alt</span>
+<span class="truncate">Groceries List</span>
+</div>
+<span class="font-status-pill text-status-pill opacity-50">1d</span>
+</div>
+</nav>
+</div>
+<div class="p-4 border-t border-white/10 mt-auto">
+<button class="w-full bg-primary-fixed-dim text-background font-label-caps text-label-caps py-3 rounded-lg hover:bg-primary-fixed transition-colors flex items-center justify-center gap-2 uppercase tracking-widest border border-transparent hover:border-white/20">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    + New Note
+                </button>
+</div>
+</aside>
+<!-- Center Column: AI Markdown Editor -->
+<section class="flex-1 flex flex-col h-full bg-[#0A0A0A] relative min-w-[500px]">
+<!-- Top: Editor Area -->
+<div class="flex-1 flex flex-col overflow-hidden">
+<div class="px-margin-desktop py-4 flex items-center justify-between border-b border-white/5">
+<div class="font-headline-md text-headline-md text-on-surface font-bold">Project Ideas for 2026</div>
+<div class="flex gap-2">
+<span class="px-2 py-1 rounded border border-white/10 text-on-surface-variant font-status-pill text-status-pill">Markdown</span>
+</div>
+</div>
+<div class="flex-1 p-margin-desktop overflow-y-auto">
+<textarea class="w-full h-full bg-transparent border-0 resize-none font-code-editor text-code-editor text-on-surface focus:ring-0 placeholder:text-on-surface-variant/30 leading-relaxed" spellcheck="false"># Next-Gen AI Native Apps
+
+## The Core Concept
+Building applications where the LLM isn't just a feature, but the runtime environment itself. Moving away from standard CRUD into semantic memory spaces.
+
+### Key Technologies needed:
+- Local WebGPU inference (eliminates API latency)
+- SQLite WASM for structured + vector hybrid storage
+- OPFS for large model caching
+
+### Initial Prototype Ideas:
+1. **SemanticNotes**: This very app. A markdown editor that auto-links concepts.
+2. **Contextual IDE**: An editor that knows the entire codebase conceptually, not just lexically.
+
+&gt; "The true power of local AI isn't privacy, it's the zero-latency feedback loop."
+                    </textarea>
+</div>
+</div>
+<!-- Divider -->
+<div class="h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent flex items-center justify-center relative my-1">
+<div class="absolute px-3 bg-[#0A0A0A] text-on-surface-variant font-label-caps text-label-caps tracking-widest uppercase">Live Preview</div>
+</div>
+<!-- Bottom: Preview Area -->
+<div class="flex-[0.8] p-margin-desktop overflow-y-auto bg-surface-container-low/30 prose prose-invert prose-p:text-body-base prose-headings:font-headline-md prose-code:font-code-editor prose-a:text-primary-fixed-dim max-w-none">
+<h1 class="text-3xl font-bold mb-6 text-on-surface tracking-tight">Next-Gen AI Native Apps</h1>
+<h2 class="text-xl font-semibold mt-8 mb-4 text-on-surface border-b border-white/10 pb-2">The Core Concept</h2>
+<p class="mb-4 text-on-surface-variant leading-relaxed">Building applications where the LLM isn't just a feature, but the runtime environment itself. Moving away from standard CRUD into semantic memory spaces.</p>
+<h3 class="text-lg font-medium mt-6 mb-3 text-on-surface">Key Technologies needed:</h3>
+<ul class="list-disc pl-6 mb-6 text-on-surface-variant space-y-2">
+<li>Local WebGPU inference (eliminates API latency)</li>
+<li>SQLite WASM for structured + vector hybrid storage</li>
+<li>OPFS for large model caching</li>
+</ul>
+</div>
+<!-- Floating AI Context Bar -->
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-3/4 max-w-xl glass-panel rounded-full px-6 py-3 flex items-center justify-between ai-glow">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed-dim animate-pulse">auto_awesome</span>
+<span class="text-on-surface-variant text-sm">AI is analyzing context...</span>
+</div>
+<div class="flex gap-2">
+<button class="text-xs px-3 py-1 rounded-full border border-white/20 hover:bg-white/10 transition-colors">Summarize</button>
+<button class="text-xs px-3 py-1 rounded-full border border-white/20 hover:bg-white/10 transition-colors">Find Links</button>
+</div>
+</div>
+</section>
+<!-- Right Column: Semantic Context -->
+<aside class="w-[25%] min-w-[280px] max-w-[360px] flex flex-col h-full border-l border-white/10 glass-panel z-10 shrink-0">
+<div class="p-5 border-b border-white/10">
+<div class="flex items-center gap-2 font-headline-md text-headline-md text-on-surface">
+<span class="material-symbols-outlined text-primary-fixed-dim">psychology</span>
+                    🤖 Local AI Insights
+                </div>
+</div>
+<div class="flex-1 overflow-y-auto p-5 space-y-8 max-h-[40%]">
+<!-- Auto Tags -->
+<div>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-3 uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">label</span>
+                        ✨ Auto-Tags
+                    </h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-full border border-primary-fixed-dim/30 bg-primary-fixed-dim/5 text-primary-fixed-dim text-sm font-code-editor">#webgpu</span>
+<span class="px-3 py-1 rounded-full border border-secondary/30 bg-secondary/5 text-secondary text-sm font-code-editor">#sqlite</span>
+<span class="px-3 py-1 rounded-full border border-tertiary-fixed-dim/30 bg-tertiary-fixed-dim/5 text-tertiary-fixed-dim text-sm font-code-editor">#ai</span>
+</div>
+</div>
+<!-- Related -->
+<div>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-3 uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">link</span>
+                        🔗 Semantically Related
+                    </h3>
+<div class="space-y-2">
+<div class="p-3 rounded-lg border border-white/5 bg-surface-container/50 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-1">
+<span class="font-medium text-sm text-on-surface group-hover:text-primary-fixed-dim transition-colors">SQLite WASM Setup</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-status-pill bg-secondary/20 text-secondary border border-secondary/30">94%</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-2">Configuration notes for setting up the local vector store alongside the standard relational tables.</p>
+</div>
+<div class="p-3 rounded-lg border border-white/5 bg-surface-container/50 hover:bg-surface-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-1">
+<span class="font-medium text-sm text-on-surface group-hover:text-primary-fixed-dim transition-colors">OPFS Caching Strategy</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-status-pill bg-secondary-fixed-dim/20 text-secondary-fixed-dim border border-secondary-fixed-dim/30">82%</span>
+</div>
+<p class="text-xs text-on-surface-variant line-clamp-2">How to efficiently store large model weights in the browser's origin private file system.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Metrics -->
+<div class="border-t border-white/10 flex flex-col h-[300px] shrink-0">
+<!-- Q&A Header -->
+<div class="p-4 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 font-label-caps text-label-caps text-on-surface uppercase tracking-widest">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+                Local AI Q&amp;A
+            </div>
+<div class="flex items-center gap-1.5">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></div>
+<span class="text-[10px] font-status-pill text-secondary uppercase">Loaded</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<select class="flex-1 bg-surface-container-highest border-0 rounded py-1 px-2 text-[11px] font-code-editor text-on-surface focus:ring-1 focus:ring-primary-fixed-dim">
+<option>Qwen 2.5 0.5B (Active)</option>
+<option>Llama 3.2 1B</option>
+</select>
+<span class="text-[10px] font-code-editor text-on-surface-variant whitespace-nowrap">100% Progress</span>
+</div>
+</div>
+<!-- Chat History -->
+<div class="flex-1 overflow-y-auto px-4 space-y-4 py-2 bg-black/20">
+<!-- User Message -->
+<div class="flex flex-col items-end gap-1">
+<div class="bg-primary-fixed-dim/10 border border-primary-fixed-dim/20 rounded-lg px-3 py-2 text-xs text-on-surface max-w-[90%]">
+                What are my project ideas for 2026?
+            </div>
+<span class="text-[9px] font-label-caps text-on-surface-variant uppercase">User</span>
+</div>
+<!-- AI Message -->
+<div class="flex flex-col items-start gap-1">
+<div class="bg-surface-container-high border border-white/5 rounded-lg px-3 py-2 text-xs text-on-surface-variant max-w-[90%] leading-relaxed">
+                Based on your notes, you plan to build a local-first utility app using WebGPU and SQLite WASM...
+            </div>
+<span class="text-[9px] font-label-caps text-secondary uppercase">Qwen</span>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-3 border-t border-white/5">
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container border-0 rounded-lg pl-3 pr-10 py-2 text-[12px] placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary-fixed-dim focus:outline-none" placeholder="Ask anything about your notes..." type="text"/>
+<button class="absolute right-2 text-primary-fixed-dim hover:text-primary-fixed transition-colors">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</div>
+</div><div class="p-5 border-t border-white/10 bg-surface-container-highest/30">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-3 uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">query_stats</span>
+                    📊 Database Vector Metrics
+                </h3>
+<div class="space-y-2 font-code-editor text-[12px]">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant">Embed Time</span>
+<span class="text-primary-fixed-dim">42ms</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant">SQL Query Time</span>
+<span class="text-secondary">3ms</span>
+</div>
+<div class="flex justify-between items-center mt-2 pt-2 border-t border-white/5">
+<span class="text-on-surface-variant">Total Vectors</span>
+<span class="text-on-surface">1,402</span>
+</div>
+</div>
+</div>
+</aside>
+</main>
+</body></html>
