@@ -57,5 +57,8 @@ coverage/
 *.orig
 *.rej
 
+# Python test cache
+.pytest_cache/
+
 # .archive files (keep for reference, but ignore in version control)
 .archive/
