@@ -1,11 +1,13 @@
 # Plan 01b — Data & Model Layer
 
-**Status**: `Draft`  
+**Status**: `In Progress`  
 **Author**: Planning Agent  
 **Created**: 2026-05-12  
 **Last Updated**: 2026-05-12  
 **Priority**: `High`  
 **Estimated Effort**: 6 Story Points / 1.5 Days
+
+> **Peer Review Note**: 0% of acceptance criteria are implemented. This plan is the critical path blocker for Plans 03a through 05b. The `Note` type exists (`src/types/note.ts`) but the SQLite worker, Web Locks wrapper, ModelManager, and loading state hooks are all pending.
 
 ## 1. Objective
 

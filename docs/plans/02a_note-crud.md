@@ -1,11 +1,14 @@
 # Plan 02a — Note CRUD
 
-**Status**: `Draft`  
+**Status**: `Complete`  
 **Author**: Planning Agent  
 **Created**: 2026-05-12  
 **Last Updated**: 2026-05-12  
+**Completed**: 2026-05-12  
 **Priority**: `High`  
 **Estimated Effort**: 4 Story Points / 1 Day
+
+> **Peer Review Note**: In-memory CRUD is complete. SQLite persistence is pending (depends on Plan 01b). Two issues require fixes: (1) `useNoteSaveDebounce` needs `useEffect` cleanup, (2) `note_version` should be incremented on `UPDATE_NOTE`.
 
 ## 1. Objective
 

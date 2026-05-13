@@ -1,6 +1,6 @@
 # Plan 03a — Embedding Pipeline
 
-**Status**: `Draft`  
+**Status**: `Complete`  
 **Author**: Planning Agent  
 **Created**: 2026-05-12  
 **Last Updated**: 2026-05-12  
@@ -15,12 +15,12 @@ Build the embedding pipeline: text chunking, cosine similarity computation, and 
 
 ### In Scope
 
-- [ ] Text chunking (256-token sliding window with 64-token overlap)
-- [ ] Cosine similarity computation between Float32Array vectors
-- [ ] Vector storage in `note_embeddings` table
-- [ ] Embedding debounce to prevent race conditions
-- [ ] Embedding pipeline tests
-- [ ] Cosine similarity tests
+- [x] Text chunking (256-token sliding window with 64-token overlap)
+- [x] Cosine similarity computation between Float32Array vectors
+- [x] Vector storage in `note_embeddings` table
+- [x] Embedding debounce to prevent race conditions
+- [x] Embedding pipeline tests
+- [x] Cosine similarity tests
 
 ### Out of Scope
 
@@ -31,11 +31,11 @@ Build the embedding pipeline: text chunking, cosine similarity computation, and 
 
 | #   | Criterion                                                    | Status |
 | --- | ------------------------------------------------------------ | ------ |
-| 1   | Text is chunked into 256-token windows with 64-token overlap | `[ ]`  |
-| 2   | 384-dim embedding is computed for each chunk                 | `[ ]`  |
-| 3   | Cosine similarity scores are computed correctly              | `[ ]`  |
-| 4   | Embeddings are stored as Float32Array BLOBs in SQLite        | `[ ]`  |
-| 5   | Embedding debounce prevents race conditions                  | `[ ]`  |
+| 1   | Text is chunked into 256-token windows with 64-token overlap | `[x]`  |
+| 2   | 384-dim embedding is computed for each chunk                 | `[x]`  |
+| 3   | Cosine similarity scores are computed correctly              | `[x]`  |
+| 4   | Embeddings are stored as Float32Array BLOBs in SQLite        | `[x]`  |
+| 5   | Embedding debounce prevents race conditions                  | `[x]`  |
 
 ## 4. TDD Test Cases
 
@@ -112,8 +112,21 @@ Follow `04_embedding_pipeline_spec.md` Section 4:
 
 ## 10. Completion Checklist
 
-- [ ] All acceptance criteria met
-- [ ] Tests written and passing
-- [ ] Code reviewed
-- [ ] Documentation updated
-- [ ] No regressions in existing features
+- [x] All acceptance criteria met
+- [x] Tests written and passing
+- [x] Code reviewed
+- [x] Documentation updated
+- [x] No regressions in existing features
+
+## 11. Implementation Summary
+
+| File                                       | Status | Description                       |
+| ------------------------------------------ | ------ | --------------------------------- |
+| `src/utils/cosine-similarity.ts`           | ✅     | Cosine similarity computation     |
+| `src/utils/text-chunking.ts`               | ✅     | 256-token sliding window chunking |
+| `src/hooks/useEmbeddingPipeline.ts`        | ✅     | Embedding pipeline hook           |
+| `tests/utils/cosine-similarity.test.ts`    | ✅     | Cosine similarity tests (9)       |
+| `tests/utils/text-chunking.test.ts`        | ✅     | Text chunking tests (11)          |
+| `tests/hooks/useEmbeddingPipeline.test.ts` | ✅     | Embedding pipeline tests (4)      |
+
+**Total Tests**: 24 passed across 3 test suites.

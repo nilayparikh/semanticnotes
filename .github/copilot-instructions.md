@@ -44,6 +44,16 @@
 - **Worker Threads**: WASM SQLite queries, embedding pipelines, model inference.
 - **Communication**: `MessageChannel` with `Transferable` objects (Float32Array, ArrayBuffer) for zero-copy data passing.
 
+### Mandatory Planning Phase
+
+All features require a plan in `docs/plans/` before implementation.
+
+- Regular plans: `docs/plans/<feature_name>.md`
+- Drift plans: `docs/plans/drifts/<YYYY-MM-DD-HH-MM>/<phase_number>_name.md`
+- Review/drift reports: `docs/review/<type>-YYYY-MM-DD.md`
+
+**Reference**: `docs/plans/README.md` (template)
+
 ### Storage Layer
 
 - **Primary**: `wa-sqlite` over OPFS (structuredClone-friendly, atomic commits).
@@ -141,10 +151,12 @@ semanticnotes.ai/
 
 When working in this workspace, agents should:
 
-1. **Read instruction files first**: Check `.github/instructions/` for directory-specific rules before making changes.
-2. **Use workflow prompts**: Use `.github/prompts/` for structured workflows (sn_plan, sn_new, sn_change, sn_test, sn_drift).
-3. **Use skills for specialized tasks**: Discover and invoke skills in `.github/skills/` for documentation, UI layout, TS/React auditing, and WASM/SQLite validation.
-4. **Follow TDD**: Write a test before touching implementation code.
-5. **Reference docs**: Use `docs/` for architectural context instead of guessing.
-6. **Keep it local-first**: Avoid introducing server dependencies unless explicitly specified.
-7. **Follow best practices**: All agent workflows must comply with `docs/code-agents/best-practices.md`.
+1. **Read SKILLS-REGISTRY.md**: Check `.github/SKILLS-REGISTRY.md` for available skills
+2. **Read instruction files**: Check `.github/instructions/` for directory-specific rules before making changes
+3. **Use workflow prompts**: Use `.github/prompts/` for structured workflows (sn_plan, sn_new, sn_change, sn_test, sn_drift)
+4. **Use skills for specialized tasks**: Discover and invoke skills in `.github/skills/` for documentation, UI layout, TS/React auditing, and WASM/SQLite validation
+5. **Follow TDD**: Write a test before touching implementation code
+6. **Reference docs**: Use `docs/` for architectural context instead of guessing
+7. **Keep it local-first**: Avoid introducing server dependencies unless explicitly specified
+8. **Follow best practices**: All agent workflows must comply with `docs/code-agents/best-practices.md`
+9. **Drift plans use timestamps**: Drift plans live in `docs/plans/drifts/<YYYY-MM-DD-HH-MM>/` format

@@ -1,15 +1,15 @@
 # Plan 02b — Note UI
 
-**Status**: `Draft`  
+**Status**: `Complete`  
 **Author**: Planning Agent  
 **Created**: 2026-05-12  
 **Last Updated**: 2026-05-12  
+**Completed**: 2026-05-12
 **Priority**: `High`  
 **Estimated Effort**: 4 Story Points / 1 Day
 
-## 1. Objective
-
-Implement the note UI components: Markdown editor with live preview, sidebar note list, and new note button. This is the view layer for note management — the user-facing interface for working with notes.
+> **Peer Review Note**: All 4 components are implemented. Two improvements recommended: (1) Memoize sorted notes in `NoteList` with `useMemo`, (2) Add ARIA attributes (`aria-selected`, `role="option"`) for accessibility.
+> Implement the note UI components: Markdown editor with live preview, sidebar note list, and new note button. This is the view layer for note management — the user-facing interface for working with notes.
 
 ## 2. Scope
 
