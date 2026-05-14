@@ -1,12 +1,21 @@
-# Plan 02a — Note CRUD
-
-**Status**: `Complete`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Completed**: 2026-05-12  
-**Priority**: `High`  
-**Estimated Effort**: 4 Story Points / 1 Day
+---
+title: "Plan 02a — Note CRUD"
+plan_id: "02a_note-crud"
+status: "Complete"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: 2026-05-12
+priority: "High"
+story_points: 4
+effort_days: 1
+depends_on: [01b_data-model-layer]
+depends_on_external: []
+phase: 2
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 > **Peer Review Note**: In-memory CRUD is complete. SQLite persistence is pending (depends on Plan 01b). Two issues require fixes: (1) `useNoteSaveDebounce` needs `useEffect` cleanup, (2) `note_version` should be incremented on `UPDATE_NOTE`.
 
@@ -36,13 +45,13 @@ Implement the note data model and CRUD operations: create, read, update, and del
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                                                 | Status |
-| --- | ------------------------------------------------------------------------- | ------ |
-| 1   | User can create a new note with unique ID, title, content, and updated_at | `[ ]`  |
-| 2   | Notes are persisted to SQLite `notes` table                               | `[ ]`  |
-| 3   | Changes are saved to SQLite on 1000ms debounce                            | `[ ]`  |
-| 4   | Note updates use optimistic locking with `note_version`                   | `[ ]`  |
-| 5   | Notes can be deleted by ID                                                | `[ ]`  |
+| #   | Criterion                                                                 | Verification Method | Status |
+| --- | ------------------------------------------------------------------------- | ------------------- | ------ |
+| 1   | User can create a new note with unique ID, title, content, and updated_at | Unit Test           | `[ ]`  |
+| 2   | Notes are persisted to SQLite `notes` table                               | Integration Test    | `[ ]`  |
+| 3   | Changes are saved to SQLite on 1000ms debounce                            | Unit Test           | `[ ]`  |
+| 4   | Note updates use optimistic locking with `note_version`                   | Unit Test           | `[ ]`  |
+| 5   | Notes can be deleted by ID                                                | Unit Test           | `[ ]`  |
 
 ## 4. TDD Test Cases
 

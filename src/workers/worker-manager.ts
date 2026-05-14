@@ -66,25 +66,28 @@ export class WorkerManager {
     const entry = this.workers.get(name);
     if (!entry) {
       return Promise.reject(new Error(`Worker '${name}' not found`));
-    }
+      }
 
     const id = nextWorkerMessageId();
     return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        entry.worker.removeEventListener("message", handler);
-        reject(new Error(`Ping timeout for worker '${name}'`));
-      }, 5000);
+      const timeout = setTimeout(
+        () => {
+          entry.worker.removeEventListener('message', handler);
+          reject(new Error(`Ping timeout for worker '${name}'`));
+        },
+        5000,
+      );
 
       const handler = (event: MessageEvent) => {
         const data = event.data;
         if (data?.type === "worker:pong" && data.id === id) {
           clearTimeout(timeout);
-          entry.worker.removeEventListener("message", handler);
+          entry.worker.removeEventListener('message', handler);
           resolve(data.timestamp);
         }
       };
 
-      entry.worker.addEventListener("message", handler);
+      entry.worker.addEventListener('message', handler);
       entry.worker.postMessage({
         type: "worker:ping",
         id,

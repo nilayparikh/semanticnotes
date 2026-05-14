@@ -1,11 +1,21 @@
-# Plan 04a — RAG Pipeline
-
-**Status**: `Draft`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Priority**: `High`  
-**Estimated Effort**: 5 Story Points / 1 Day
+---
+title: "Plan 04a — RAG Pipeline"
+plan_id: "04a_rag-pipeline"
+status: "Draft"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: null
+priority: "High"
+story_points: 5
+effort_days: 1
+depends_on: [03b_semantic-search]
+depends_on_external: []
+phase: 4
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
@@ -30,13 +40,13 @@ Build the RAG (Retrieval-Augmented Generation) pipeline: query embedding, contex
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                          | Status |
-| --- | -------------------------------------------------- | ------ |
-| 1   | RAG query selects top-N notes by cosine similarity | `[ ]`  |
-| 2   | Context window is limited to 256 tokens per note   | `[ ]`  |
-| 3   | Token budgeting prevents overflow (max 128 notes)  | `[ ]`  |
-| 4   | RAG pipeline is called before chat completion      | `[ ]`  |
-| 5   | Context window is updated on note changes          | `[ ]`  |
+| #   | Criterion                                          | Verification Method | Status |
+| --- | -------------------------------------------------- | ------------------- | ------ |
+| 1   | RAG query selects top-N notes by cosine similarity | Unit Test           | `[ ]`  |
+| 2   | Context window is limited to 256 tokens per note   | Unit Test           | `[ ]`  |
+| 3   | Token budgeting prevents overflow (max 128 notes)  | Unit Test           | `[ ]`  |
+| 4   | RAG pipeline is called before chat completion      | Integration Test    | `[ ]`  |
+| 5   | Context window is updated on note changes          | Integration Test    | `[ ]`  |
 
 ## 4. TDD Test Cases
 

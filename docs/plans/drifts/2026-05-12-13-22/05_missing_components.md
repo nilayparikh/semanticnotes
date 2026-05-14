@@ -1,12 +1,23 @@
-# Plan 05 — Missing Components
-
-**Status**: `Complete`  
-**Author**: Change Agent  
-**Created**: 2026-05-12  
-**Priority**: `Critical`  
-**Estimated Effort**: 8 Story Points / 2 Days  
-**Parent**: Drift Remediation (Phase 5)  
-**Source Drifts**: #3, #4, #20, #21
+---
+title: "Plan 05 — Missing Components"
+plan_id: "drift-2026-05-12-13-22-05_missing_components"
+status: "Complete"
+author: "Change Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: "2026-05-12"
+priority: "Critical"
+story_points: 8
+effort_days: 1
+depends_on: []
+depends_on_external: []
+phase: null
+parent_drift_index: "docs/plans/drifts/README.md"
+source_drifts: ["#3", "#4", "#20", "#21"]
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
@@ -32,17 +43,17 @@ Create all missing components defined in the mock design but absent in `src/comp
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                                   | Status |
-| --- | ----------------------------------------------------------- | ------ |
-| 1   | `AIContextBar.tsx` renders floating pill                    | `[x]`  |
-| 2   | `AIContextBar.tsx` has cyan outer glow                      | `[x]`  |
-| 3   | `AIContextBar.tsx` has "Summarize" and "Find Links" buttons | `[x]`  |
-| 4   | `SemanticContextPanel.tsx` renders right panel              | `[x]`  |
-| 5   | `AutoTags.tsx` renders color-coded pill badges              | `[x]`  |
-| 6   | `SearchBar.tsx` renders glassmorphic search input           | `[x]`  |
-| 7   | `StatusBadges.tsx` renders WebGPU/SQLite badges             | `[x]`  |
-| 8   | `VectorMetrics.tsx` renders database metrics                | `[x]`  |
-| 9   | `AIChat.tsx` renders chat interface                         | `[x]`  |
+| #   | Criterion                                                   | Verification Method | Status |
+| --- | ----------------------------------------------------------- | ------------------- | ------ |
+| 1   | `AIContextBar.tsx` renders floating pill                    | Unit Test           | `[x]`  |
+| 2   | `AIContextBar.tsx` has cyan outer glow                      | Visual Inspection   | `[x]`  |
+| 3   | `AIContextBar.tsx` has "Summarize" and "Find Links" buttons | Unit Test           | `[x]`  |
+| 4   | `SemanticContextPanel.tsx` renders right panel              | Unit Test           | `[x]`  |
+| 5   | `AutoTags.tsx` renders color-coded pill badges              | Unit Test           | `[x]`  |
+| 6   | `SearchBar.tsx` renders glassmorphic search input           | Unit Test           | `[x]`  |
+| 7   | `StatusBadges.tsx` renders WebGPU/SQLite badges             | Unit Test           | `[x]`  |
+| 8   | `VectorMetrics.tsx` renders database metrics                | Unit Test           | `[x]`  |
+| 9   | `AIChat.tsx` renders chat interface                         | Unit Test           | `[x]`  |
 
 ## 4. TDD Test Cases
 

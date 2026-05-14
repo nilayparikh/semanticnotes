@@ -1,4 +1,18 @@
-# Drift Remediation — Master Index
+---
+title: "Drift Remediation — Master Index"
+plan_id: "drift-index-2026-05-12"
+status: "Complete"
+author: "Change Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: "2026-05-12"
+priority: "High"
+story_points: 6
+effort_days: 1.5
+depends_on: []
+depends_on_external: []
+source_report: "docs/review/drift-report-2026-05-12.md"
+---
 
 **Status**: `In-Progress`  
 **Author**: Change Agent  
@@ -63,3 +77,10 @@ All 23 drifts are marked `Resolved` in the drift report.
 - Phase 6 (Bug Fixes) can run in parallel with Phases 3-5 since they touch different files
 - Phase 1 must complete before Phase 2 (context alignment informs design tokens)
 - Phase 5 depends on Phase 4 (components need the 3-column layout)
+
+## Convention Reference
+
+- **Front Matter**: All drift plans use YAML front matter per `PLAN_CONVENTIONS.md`
+- **Drift Plan Format**: `drift-YYYY-MM-DD-HH-MM-NN_name` plan_id format
+- **Archiving**: Completed drift plans follow `sn_archive` workflow
+- **Dependency Graph**: Drift plans tracked in `DEPENDENCY_GRAPH.md` until archived

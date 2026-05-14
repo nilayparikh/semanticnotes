@@ -19,7 +19,11 @@ describe("StatusBadges", () => {
 
   it("should render badges with correct status colors", () => {
     render(
-      <StatusBadges badges={[{ label: "Processing", status: "processing" }]} />,
+      <StatusBadges
+        badges={[
+          { label: "Processing", status: "processing" },
+        ]}
+      />,
     );
 
     expect(screen.getByText("● Processing")).toBeDefined();

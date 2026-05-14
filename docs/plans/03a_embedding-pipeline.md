@@ -1,11 +1,21 @@
-# Plan 03a — Embedding Pipeline
-
-**Status**: `Complete`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Priority**: `High`  
-**Estimated Effort**: 5 Story Points / 1 Day
+---
+title: "Plan 03a — Embedding Pipeline"
+plan_id: "03a_embedding-pipeline"
+status: "Complete"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: 2026-05-12
+priority: "High"
+story_points: 5
+effort_days: 1
+depends_on: [02b_note-ui]
+depends_on_external: []
+phase: 3
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
@@ -29,13 +39,13 @@ Build the embedding pipeline: text chunking, cosine similarity computation, and 
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                                    | Status |
-| --- | ------------------------------------------------------------ | ------ |
-| 1   | Text is chunked into 256-token windows with 64-token overlap | `[x]`  |
-| 2   | 384-dim embedding is computed for each chunk                 | `[x]`  |
-| 3   | Cosine similarity scores are computed correctly              | `[x]`  |
-| 4   | Embeddings are stored as Float32Array BLOBs in SQLite        | `[x]`  |
-| 5   | Embedding debounce prevents race conditions                  | `[x]`  |
+| #   | Criterion                                                    | Verification Method | Status |
+| --- | ------------------------------------------------------------ | ------------------- | ------ |
+| 1   | Text is chunked into 256-token windows with 64-token overlap | Unit Test           | `[x]`  |
+| 2   | 384-dim embedding is computed for each chunk                 | Integration Test    | `[x]`  |
+| 3   | Cosine similarity scores are computed correctly              | Unit Test           | `[x]`  |
+| 4   | Embeddings are stored as Float32Array BLOBs in SQLite        | Integration Test    | `[x]`  |
+| 5   | Embedding debounce prevents race conditions                  | Unit Test           | `[x]`  |
 
 ## 4. TDD Test Cases
 

@@ -1,12 +1,21 @@
-# Plan 02b — Note UI
-
-**Status**: `Complete`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Completed**: 2026-05-12
-**Priority**: `High`  
-**Estimated Effort**: 4 Story Points / 1 Day
+---
+title: "Plan 02b — Note UI"
+plan_id: "02b_note-ui"
+status: "Complete"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: 2026-05-12
+priority: "High"
+story_points: 4
+effort_days: 1
+depends_on: [02a_note-crud]
+depends_on_external: []
+phase: 2
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 > **Peer Review Note**: All 4 components are implemented. Two improvements recommended: (1) Memoize sorted notes in `NoteList` with `useMemo`, (2) Add ARIA attributes (`aria-selected`, `role="option"`) for accessibility.
 > Implement the note UI components: Markdown editor with live preview, sidebar note list, and new note button. This is the view layer for note management — the user-facing interface for working with notes.
@@ -31,13 +40,13 @@
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                                     | Status |
-| --- | ------------------------------------------------------------- | ------ |
-| 1   | User can edit note content in a borderless Markdown textarea  | `[ ]`  |
-| 2   | Live Markdown preview renders headers, paragraphs, and tables | `[ ]`  |
-| 3   | Sidebar displays hierarchical note list                       | `[ ]`  |
-| 4   | Active note is highlighted with high-contrast container       | `[ ]`  |
-| 5   | Relative timestamps display ("Just now", "5 min ago")         | `[ ]`  |
+| #   | Criterion                                                     | Verification Method | Status |
+| --- | ------------------------------------------------------------- | ------------------- | ------ |
+| 1   | User can edit note content in a borderless Markdown textarea  | Unit Test           | `[ ]`  |
+| 2   | Live Markdown preview renders headers, paragraphs, and tables | Unit Test           | `[ ]`  |
+| 3   | Sidebar displays hierarchical note list                       | Manual Check        | `[ ]`  |
+| 4   | Active note is highlighted with high-contrast container       | Manual Check        | `[ ]`  |
+| 5   | Relative timestamps display ("Just now", "5 min ago")         | Unit Test           | `[ ]`  |
 
 ## 4. TDD Test Cases
 

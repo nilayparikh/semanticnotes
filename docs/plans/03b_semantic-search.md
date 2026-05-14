@@ -1,11 +1,21 @@
-# Plan 03b — Semantic Search
-
-**Status**: `Draft`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Priority**: `High`  
-**Estimated Effort**: 5 Story Points / 1 Day
+---
+title: "Plan 03b — Semantic Search"
+plan_id: "03b_semantic-search"
+status: "Draft"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: null
+priority: "High"
+story_points: 5
+effort_days: 1
+depends_on: [03a_embedding-pipeline]
+depends_on_external: []
+phase: 3
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
@@ -32,13 +42,13 @@ Implement the semantic search hook and BM25 fallback: query embedding, similarit
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                                        | Status |
-| --- | ---------------------------------------------------------------- | ------ |
-| 1   | Sidebar contains search input labeled "🔍 AI Semantic Search..." | `[ ]`  |
-| 2   | Query string is embedded to 384-dim vector on keystroke          | `[ ]`  |
-| 3   | Search results display proximity percentages (e.g., "94%")       | `[ ]`  |
-| 4   | BM25 fallback activates when WebGPU score < 31                   | `[ ]`  |
-| 5   | Search results highlight matching notes in sidebar               | `[ ]`  |
+| #   | Criterion                                                        | Verification Method | Status |
+| --- | ---------------------------------------------------------------- | ------------------- | ------ |
+| 1   | Sidebar contains search input labeled "🔍 AI Semantic Search..." | Manual Check        | `[ ]`  |
+| 2   | Query string is embedded to 384-dim vector on keystroke          | Integration Test    | `[ ]`  |
+| 3   | Search results display proximity percentages (e.g., "94%")       | Unit Test           | `[ ]`  |
+| 4   | BM25 fallback activates when WebGPU score < 31                   | Integration Test    | `[ ]`  |
+| 5   | Search results highlight matching notes in sidebar               | Manual Check        | `[ ]`  |
 
 ## 4. TDD Test Cases
 

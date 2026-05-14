@@ -4,7 +4,12 @@ import { SemanticContextPanel } from "@/components/SemanticContextPanel";
 
 describe("SemanticContextPanel", () => {
   it("should render Auto-Tags section", () => {
-    render(<SemanticContextPanel tags={["AI", "Design"]} relatedNotes={[]} />);
+    render(
+      <SemanticContextPanel
+        tags={["AI", "Design"]}
+        relatedNotes={[]}
+      />,
+    );
 
     expect(screen.getByText("Auto-Tags")).toBeDefined();
     expect(screen.getByText("AI")).toBeDefined();
@@ -14,7 +19,9 @@ describe("SemanticContextPanel", () => {
     render(
       <SemanticContextPanel
         tags={["AI"]}
-        relatedNotes={[{ id: "1", title: "Note 1", similarity: 0.85 }]}
+        relatedNotes={[
+          { id: "1", title: "Note 1", similarity: 0.85 },
+        ]}
       />,
     );
 
@@ -23,13 +30,23 @@ describe("SemanticContextPanel", () => {
   });
 
   it("should render Local AI Q&A chat", () => {
-    render(<SemanticContextPanel tags={["AI"]} relatedNotes={[]} />);
+    render(
+      <SemanticContextPanel
+        tags={["AI"]}
+        relatedNotes={[]}
+      />,
+    );
 
     expect(screen.getByText("Local AI Q&A")).toBeDefined();
   });
 
   it("should render Database Vector Metrics", () => {
-    render(<SemanticContextPanel tags={["AI"]} relatedNotes={[]} />);
+    render(
+      <SemanticContextPanel
+        tags={["AI"]}
+        relatedNotes={[]}
+      />,
+    );
 
     expect(screen.getByText("Vector Metrics")).toBeDefined();
   });

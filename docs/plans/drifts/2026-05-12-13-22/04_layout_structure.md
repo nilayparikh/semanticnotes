@@ -1,18 +1,27 @@
-# Plan 04 — Layout Structure
-
-**Status**: `Pending`  
-**Author**: Change Agent  
-**Created**: 2026-05-12  
-**Priority**: `Critical`  
-**Estimated Effort**: 5 Story Points / 1 Day  
-**Parent**: Drift Remediation (Phase 4)  
-**Source Drifts**: #2, #19, #20, #21
+---
+title: "Plan 04 — Layout Structure"
+plan_id: "drift-2026-05-12-13-22-04_layout_structure"
+status: "Complete"
+author: "Change Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: "2026-05-12"
+priority: "Critical"
+story_points: 3
+effort_days: 0.75
+depends_on: []
+depends_on_external: []
+phase: null
+parent_drift_index: "docs/plans/drifts/README.md"
+source_drifts: ["#2", "#19", "#20", "#21"]
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
 Implement the 3-column layout structure defined in `mock/code.html`: Sidebar (20%), Editor (55%), Context Panel (25%). This phase transforms `App.tsx` from a single-column placeholder to the approved mock layout.
-
-**Status**: `Complete`
 
 ## 2. Scope
 
@@ -33,14 +42,14 @@ Implement the 3-column layout structure defined in `mock/code.html`: Sidebar (20
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                 | Status |
-| --- | ----------------------------------------- | ------ |
-| 1   | `App.tsx` implements 3-column flex layout | `[x]`  |
-| 2   | Sidebar has 20% fixed width               | `[x]`  |
-| 3   | Editor has 55% fluid width                | `[x]`  |
-| 4   | Context Panel has 25% width               | `[x]`  |
-| 5   | Header includes status badges             | `[x]`  |
-| 6   | Sidebar includes search bar               | `[x]`  |
+| #   | Criterion                                 | Verification Method | Status |
+| --- | ----------------------------------------- | ------------------- | ------ |
+| 1   | `App.tsx` implements 3-column flex layout | Unit Test           | `[x]`  |
+| 2   | Sidebar has 20% fixed width               | E2E Test            | `[x]`  |
+| 3   | Editor has 55% fluid width                | E2E Test            | `[x]`  |
+| 4   | Context Panel has 25% width               | E2E Test            | `[x]`  |
+| 5   | Header includes status badges             | Visual Inspection   | `[x]`  |
+| 6   | Sidebar includes search bar               | Visual Inspection   | `[x]`  |
 
 ## 4. TDD Test Cases
 

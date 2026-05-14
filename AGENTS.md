@@ -9,9 +9,9 @@
 
 | File                                 | Purpose                                 | Scope             |
 | ------------------------------------ | --------------------------------------- | ----------------- |
-| `.github/copilot-instructions.md`    | Architecture, tech stack, constraints   | Global            |
-| `.github/SKILLS-REGISTRY.md`         | Skills inventory                        | Global            |
-| `.agents/skills/`                    | Agent-specific skills directory         | Global            |
+| `.github/copilot-instructions.md`   | Architecture, tech stack, constraints   | Global            |
+| `.github/SKILLS-REGISTRY.md`        | Skills inventory                        | Global            |
+| `.agents/skills/`                   | Agent-specific skills directory         | Global            |
 | `.github/instructions/`              | Technical constraints (by folder)       | `applyTo` pattern |
 | `.github/prompts/`                   | Workflow prompts (sn_plan, sn_new, etc) | Global            |
 | `docs/code-agents/best-practices.md` | Sub-agent orchestration guidelines      | Global            |
@@ -53,13 +53,13 @@ All features require a plan in `docs/plans/` before implementation.
 
 **Workflow Triggers**:
 
-| Trigger     | Purpose                        |
-| ----------- | ------------------------------ |
-| `sn_plan`   | Create implementation plan     |
-| `sn_new`    | Implement new feature          |
-| `sn_change` | Modify existing feature        |
-| `sn_test`   | Run test suite                 |
-| `sn_drift`  | Detect drifts from mock/design |
+| Trigger | Purpose |
+|---------|---------|
+| `sn_plan` | Create implementation plan |
+| `sn_new` | Implement new feature |
+| `sn_change` | Modify existing feature |
+| `sn_test` | Run test suite |
+| `sn_drift` | Detect drifts from mock/design |
 
 ### 2. Read Context Files (In Order)
 

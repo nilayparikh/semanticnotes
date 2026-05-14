@@ -1,12 +1,23 @@
-# Plan 06 — Code Quality & Bug Fixes
-
-**Status**: `Complete`  
-**Author**: Change Agent  
-**Created**: 2026-05-12  
-**Priority**: `High`  
-**Estimated Effort**: 3 Story Points / 0.5 Days  
-**Parent**: Drift Remediation (Phase 6)  
-**Source Drifts**: #9, #10, #11, #12, #13
+---
+title: "Plan 06 — Code Quality & Bug Fixes"
+plan_id: "drift-2026-05-12-13-22-06_code_quality"
+status: "Complete"
+author: "Change Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: "2026-05-12"
+priority: "Critical"
+story_points: 2
+effort_days: 0.5
+depends_on: []
+depends_on_external: []
+phase: null
+parent_drift_index: "docs/plans/drifts/README.md"
+source_drifts: ["#9", "#10", "#11", "#12", "#13"]
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
@@ -30,13 +41,13 @@ Fix high-severity bugs identified in the implementation review report: WorkerMan
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                      | Status |
-| --- | ---------------------------------------------- | ------ |
-| 1   | `WorkerManager.ping()` uses `addEventListener` | `[x]`  |
-| 2   | `assessCapability()` uses `requestDevice()`    | `[x]`  |
-| 3   | `useNoteSaveDebounce` has `useEffect` cleanup  | `[x]`  |
-| 4   | `note_version` increments on `UPDATE_NOTE`     | `[x]`  |
-| 5   | `NoteList` uses `useMemo` for sorting          | `[x]`  |
+| #   | Criterion                                      | Verification Method | Status |
+| --- | ---------------------------------------------- | ------------------- | ------ |
+| 1   | `WorkerManager.ping()` uses `addEventListener` | Unit Test           | `[x]`  |
+| 2   | `assessCapability()` uses `requestDevice()`    | Unit Test           | `[x]`  |
+| 3   | `useNoteSaveDebounce` has `useEffect` cleanup  | Unit Test           | `[x]`  |
+| 4   | `note_version` increments on `UPDATE_NOTE`     | Unit Test           | `[x]`  |
+| 5   | `NoteList` uses `useMemo` for sorting          | Unit Test           | `[x]`  |
 
 ## 4. TDD Test Cases
 

@@ -1,11 +1,21 @@
-# Plan 05b — UI Indicators
-
-**Status**: `Draft`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Priority**: `Medium`  
-**Estimated Effort**: 4 Story Points / 0.5 Days
+---
+title: "Plan 05b — UI Indicators"
+plan_id: "05b_ui-indicators"
+status: "Draft"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: null
+priority: "Medium"
+story_points: 4
+effort_days: 0.5
+depends_on: [05a_layout-structure]
+depends_on_external: []
+phase: 5
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
@@ -28,13 +38,13 @@ Implement UI indicators: loading overlay, performance metrics display, and glass
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                                   | Status |
-| --- | ----------------------------------------------------------- | ------ |
-| 1   | Loading overlay displays model progress                     | `[ ]`  |
-| 2   | Performance metrics show FPS, bundle size, memory           | `[ ]`  |
-| 3   | Glassmorphic theme uses backdrop-blur and semi-transparency | `[ ]`  |
-| 4   | Theme toggle switches between Light/Dark/System             | `[ ]`  |
-| 5   | UI indicators pass visual tests                             | `[ ]`  |
+| #   | Criterion                                                   | Verification Method | Status |
+| --- | ----------------------------------------------------------- | ------------------- | ------ |
+| 1   | Loading overlay displays model progress                     | Manual Check        | `[ ]`  |
+| 2   | Performance metrics show FPS, bundle size, memory           | Unit Test           | `[ ]`  |
+| 3   | Glassmorphic theme uses backdrop-blur and semi-transparency | Manual Check        | `[ ]`  |
+| 4   | Theme toggle switches between Light/Dark/System             | Unit Test           | `[ ]`  |
+| 5   | UI indicators pass visual tests                             | Integration Test    | `[ ]`  |
 
 ## 4. TDD Test Cases
 

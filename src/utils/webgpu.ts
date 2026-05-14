@@ -71,14 +71,9 @@ export async function assessCapability(adapter: GPUAdapter): Promise<number> {
     if (device) {
       score += 20;
       // Use device limits instead of adapter getInfo
-      const limits = (
-        device as unknown as { limits?: { maxBufferSize?: number } }
-      ).limits;
+      const limits = (device as unknown as { limits?: { maxBufferSize?: number } }).limits;
       const bufferSize = limits?.maxBufferSize ?? 0;
-      score += Math.min(
-        20,
-        Math.round((bufferSize / (256 * 1024 * 1024)) * 20),
-      );
+      score += Math.min(20, Math.round((bufferSize / (256 * 1024 * 1024)) * 20));
     }
   } catch {
     // Device creation failed; memory/dimension scores remain 0

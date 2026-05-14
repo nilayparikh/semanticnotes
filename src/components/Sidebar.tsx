@@ -29,11 +29,7 @@ export function Sidebar({
         />
       </div>
       <div className="flex-1 overflow-y-auto">
-        <NoteList
-          notes={notes}
-          selectedNoteId={selectedNoteId}
-          onSelect={onSelectNote}
-        />
+        <NoteList notes={notes} selectedNoteId={selectedNoteId} onSelect={onSelectNote} />
       </div>
       <div className="p-4">
         <NewNoteButton onClick={onNewNote} />

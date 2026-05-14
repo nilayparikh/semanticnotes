@@ -1,12 +1,21 @@
-# Plan 00 — Project Setup
-
-**Status**: `Complete`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Completed**: 2026-05-12  
-**Priority**: `Critical`  
-**Estimated Effort**: 3 Story Points / 0.5 Days
+---
+title: "Plan 00 — Project Setup"
+plan_id: "00_project-setup"
+status: "Complete"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: 2026-05-12
+priority: "Critical"
+story_points: 3
+effort_days: 0.5
+depends_on: []
+depends_on_external: []
+phase: 0
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
@@ -37,16 +46,16 @@ Scaffold the SemanticNotes.ai project structure: initialize Vite + React + TypeS
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                         | Status |
-| --- | ------------------------------------------------- | ------ |
-| 1   | Vite dev server starts and serves index.html      | `[ ]`  |
-| 2   | TypeScript strict mode compiles with zero errors  | `[ ]`  |
-| 3   | Vitest runs with zero tests passing               | `[ ]`  |
-| 4   | Playwright E2E suite runs with zero tests passing | `[ ]`  |
-| 5   | Tailwind CSS processes and outputs CSS            | `[ ]`  |
-| 6   | ESLint lints src/ with zero warnings              | `[ ]`  |
-| 7   | .gitignore excludes node_modules, dist, .vite     | `[ ]`  |
-| 8   | Directory structure matches architecture spec     | `[ ]`  |
+| #   | Criterion                                         | Verification Method | Status |
+| --- | ------------------------------------------------- | ------------------- | ------ |
+| 1   | Vite dev server starts and serves index.html      | Manual Check        | `[ ]`  |
+| 2   | TypeScript strict mode compiles with zero errors  | Unit Test           | `[ ]`  |
+| 3   | Vitest runs with zero tests passing               | Unit Test           | `[ ]`  |
+| 4   | Playwright E2E suite runs with zero tests passing | Integration Test    | `[ ]`  |
+| 5   | Tailwind CSS processes and outputs CSS            | Manual Check        | `[ ]`  |
+| 6   | ESLint lints src/ with zero warnings              | Unit Test           | `[ ]`  |
+| 7   | .gitignore excludes node_modules, dist, .vite     | Manual Check        | `[ ]`  |
+| 8   | Directory structure matches architecture spec     | Unit Test           | `[ ]`  |
 
 ## 4. TDD Test Cases
 

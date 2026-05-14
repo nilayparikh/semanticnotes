@@ -1,11 +1,21 @@
-# Plan 01b — Data & Model Layer
-
-**Status**: `In Progress`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Priority**: `High`  
-**Estimated Effort**: 6 Story Points / 1.5 Days
+---
+title: "Plan 01b — Data & Model Layer"
+plan_id: "01b_data-model-layer"
+status: "In-Progress"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: null
+priority: "High"
+story_points: 6
+effort_days: 1.5
+depends_on: [01a_worker-runtime]
+depends_on_external: []
+phase: 1
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 > **Peer Review Note**: 0% of acceptance criteria are implemented. This plan is the critical path blocker for Plans 03a through 05b. The `Note` type exists (`src/types/note.ts`) but the SQLite worker, Web Locks wrapper, ModelManager, and loading state hooks are all pending.
 
@@ -33,13 +43,13 @@ Build the data persistence and model runtime layer: wa-sqlite WASM worker, Web L
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                                                     | Status |
-| --- | ----------------------------------------------------------------------------- | ------ |
-| 1   | wa-sqlite initializes and mounts OPFS database file                           | `[ ]`  |
-| 2   | Database schema creates `notes` and `note_embeddings` tables                  | `[ ]`  |
-| 3   | Web Locks API provides exclusive/shared lock modes                            | `[ ]`  |
-| 4   | ModelManager loads embedding model sequentially without exceeding VRAM budget | `[ ]`  |
-| 5   | Loading state reducer tracks all 4 component states correctly                 | `[ ]`  |
+| #   | Criterion                                                                     | Verification Method | Status |
+| --- | ----------------------------------------------------------------------------- | ------------------- | ------ |
+| 1   | wa-sqlite initializes and mounts OPFS database file                           | Unit Test           | `[ ]`  |
+| 2   | Database schema creates `notes` and `note_embeddings` tables                  | Unit Test           | `[ ]`  |
+| 3   | Web Locks API provides exclusive/shared lock modes                            | Unit Test           | `[ ]`  |
+| 4   | ModelManager loads embedding model sequentially without exceeding VRAM budget | Integration Test    | `[ ]`  |
+| 5   | Loading state reducer tracks all 4 component states correctly                 | Unit Test           | `[ ]`  |
 
 ## 4. TDD Test Cases
 

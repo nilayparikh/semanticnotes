@@ -31,15 +31,15 @@ Align all context files (`.github/`, `docs/code-agents/`) to eliminate inconsist
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                                | Status |
-| --- | -------------------------------------------------------- | ------ |
-| 1   | `AGENTS.md` references `copilot-instructions.md`         | `[x]`  |
-| 2   | `copilot-instructions.md` references `AGENTS.md`         | `[x]`  |
-| 3   | `SKILLS-REGISTRY.md` is referenced by both files         | `[x]`  |
-| 4   | `.agents/skills/` directory is documented                | `[x]`  |
-| 5   | `sn_drift` workflow is documented in `AGENTS.md`         | `[x]`  |
-| 6   | Mandatory planning phase is in `copilot-instructions.md` | `[x]`  |
-| 7   | `docs/plans/README.md` template reference is clear       | `[x]`  |
+| #   | Criterion                                         | Status |
+| --- | ------------------------------------------------- | ------ |
+| 1   | `AGENTS.md` references `copilot-instructions.md` | `[x]`  |
+| 2   | `copilot-instructions.md` references `AGENTS.md` | `[x]`  |
+| 3   | `SKILLS-REGISTRY.md` is referenced by both files  | `[x]`  |
+| 4   | `.agents/skills/` directory is documented        | `[x]`  |
+| 5   | `sn_drift` workflow is documented in `AGENTS.md`  | `[x]`  |
+| 6   | Mandatory planning phase is in `copilot-instructions.md` | `[x]` |
+| 7   | `docs/plans/README.md` template reference is clear | `[x]`  |
 
 ## 4. TDD Test Cases
 
@@ -54,11 +54,11 @@ Add the following sections to `AGENTS.md`:
 ```markdown
 ## 📋 Context File Responsibilities
 
-| File                              | Purpose                               | Scope  |
-| --------------------------------- | ------------------------------------- | ------ |
-| `.github/copilot-instructions.md` | Architecture, tech stack, constraints | Global |
-| `.github/SKILLS-REGISTRY.md`      | Skills inventory                      | Global |
-| `.agents/skills/`                 | Agent-specific skills directory       | Global |
+| File                                 | Purpose                                 | Scope             |
+| ------------------------------------ | --------------------------------------- | ----------------- |
+| `.github/copilot-instructions.md`   | Architecture, tech stack, constraints   | Global            |
+| `.github/SKILLS-REGISTRY.md`        | Skills inventory                        | Global            |
+| `.agents/skills/`                   | Agent-specific skills directory         | Global            |
 ```
 
 Add `sn_drift` to the workflow section:
@@ -66,13 +66,13 @@ Add `sn_drift` to the workflow section:
 ```markdown
 ### Workflow Triggers
 
-| Trigger     | Purpose                        |
-| ----------- | ------------------------------ |
-| `sn_plan`   | Create implementation plan     |
-| `sn_new`    | Implement new feature          |
-| `sn_change` | Modify existing feature        |
-| `sn_test`   | Run test suite                 |
-| `sn_drift`  | Detect drifts from mock/design |
+| Trigger | Purpose |
+|---------|---------|
+| `sn_plan` | Create implementation plan |
+| `sn_new` | Implement new feature |
+| `sn_change` | Modify existing feature |
+| `sn_test` | Run test suite |
+| `sn_drift` | Detect drifts from mock/design |
 ```
 
 ### 5.2 Patch copilot-instructions.md
@@ -116,24 +116,24 @@ Copy this structure for each new plan in `docs/plans/`.
 
 ## 7. Risks & Mitigations
 
-| Risk                             | Impact | Mitigation                       |
-| -------------------------------- | ------ | -------------------------------- |
-| Overlapping changes to AGENTS.md | Low    | Use `git diff` to verify changes |
-| Inconsistent terminology         | Low    | Use "Context Files" consistently |
+| Risk | Impact | Mitigation |
+|------|--------|-----------|
+| Overlapping changes to AGENTS.md | Low | Use `git diff` to verify changes |
+| Inconsistent terminology | Low | Use "Context Files" consistently |
 
 ## 8. Test Strategy
 
-| Test Type | Scope                     | Location                                               |
-| --------- | ------------------------- | ------------------------------------------------------ |
-| Manual    | File content verification | `.github/AGENTS.md`, `.github/copilot-instructions.md` |
+| Test Type | Scope | Location |
+|-----------|-------|----------|
+| Manual | File content verification | `.github/AGENTS.md`, `.github/copilot-instructions.md` |
 
 ## 9. Files to Create / Modify
 
-| File                              | Action | Description                                                                   |
-| --------------------------------- | ------ | ----------------------------------------------------------------------------- |
-| `AGENTS.md`                       | Modify | Add bidirectional references, `sn_drift` trigger, `.agents/skills/` directory |
-| `.github/copilot-instructions.md` | Modify | Add mandatory planning phase, SKILLS-REGISTRY.md reference                    |
-| `docs/plans/README.md`            | Modify | Clarify template status                                                       |
+| File | Action | Description |
+|------|--------|-------------|
+| `AGENTS.md` | Modify | Add bidirectional references, `sn_drift` trigger, `.agents/skills/` directory |
+| `.github/copilot-instructions.md` | Modify | Add mandatory planning phase, SKILLS-REGISTRY.md reference |
+| `docs/plans/README.md` | Modify | Clarify template status |
 
 ## 10. Completion Checklist
 

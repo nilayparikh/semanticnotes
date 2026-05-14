@@ -1,12 +1,21 @@
-# Plan 01a — Worker Runtime
-
-**Status**: `Complete`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Completed**: 2026-05-12  
-**Priority**: `High`  
-**Estimated Effort**: 6 Story Points / 1.5 Days
+---
+title: "Plan 01a — Worker Runtime"
+plan_id: "01a_worker-runtime"
+status: "Complete"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: 2026-05-12
+priority: "High"
+story_points: 6
+effort_days: 1.5
+depends_on: [00_project-setup]
+depends_on_external: []
+phase: 1
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
@@ -31,13 +40,13 @@ Build the worker messaging system: typed message contracts, WorkerManager class,
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                                       | Status |
-| --- | --------------------------------------------------------------- | ------ |
-| 1   | Worker message types are TypeScript-strict discriminated unions | `[ ]`  |
-| 2   | WorkerManager routes messages between UI and workers            | `[ ]`  |
-| 3   | Worker health check ping/pong mechanism works                   | `[ ]`  |
-| 4   | WebGPU detection returns accurate capability assessment         | `[ ]`  |
-| 5   | WorkerManager terminates all workers on cleanup                 | `[ ]`  |
+| #   | Criterion                                                       | Verification Method | Status |
+| --- | --------------------------------------------------------------- | ------------------- | ------ |
+| 1   | Worker message types are TypeScript-strict discriminated unions | Unit Test           | `[ ]`  |
+| 2   | WorkerManager routes messages between UI and workers            | Unit Test           | `[ ]`  |
+| 3   | Worker health check ping/pong mechanism works                   | Unit Test           | `[ ]`  |
+| 4   | WebGPU detection returns accurate capability assessment         | Unit Test           | `[ ]`  |
+| 5   | WorkerManager terminates all workers on cleanup                 | Unit Test           | `[ ]`  |
 
 ## 4. TDD Test Cases
 

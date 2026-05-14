@@ -1,11 +1,21 @@
-# Plan 05a — Layout Structure
-
-**Status**: `Draft`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Priority**: `Medium`  
-**Estimated Effort**: 4 Story Points / 0.5 Days
+---
+title: "Plan 05a — Layout Structure"
+plan_id: "05a_layout-structure"
+status: "Draft"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: null
+priority: "Medium"
+story_points: 4
+effort_days: 0.5
+depends_on: [04b_chat-ui]
+depends_on_external: []
+phase: 5
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
@@ -28,13 +38,13 @@ Build the 3-column CSS Grid layout structure with global header and responsive c
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                                  | Status |
-| --- | ---------------------------------------------------------- | ------ |
-| 1   | Layout uses 3-column CSS Grid                              | `[ ]`  |
-| 2   | Global header displays app title and model status          | `[ ]`  |
-| 3   | Responsive collapse at 768px (tablet) and 1024px (desktop) | `[ ]`  |
-| 4   | Sidebar is collapsible on mobile                           | `[ ]`  |
-| 5   | Layout passes responsive breakpoint tests                  | `[ ]`  |
+| #   | Criterion                                                  | Verification Method | Status |
+| --- | ---------------------------------------------------------- | ------------------- | ------ |
+| 1   | Layout uses 3-column CSS Grid                              | Manual Check        | `[ ]`  |
+| 2   | Global header displays app title and model status          | Manual Check        | `[ ]`  |
+| 3   | Responsive collapse at 768px (tablet) and 1024px (desktop) | Integration Test    | `[ ]`  |
+| 4   | Sidebar is collapsible on mobile                           | Manual Check        | `[ ]`  |
+| 5   | Layout passes responsive breakpoint tests                  | Unit Test           | `[ ]`  |
 
 ## 4. TDD Test Cases
 

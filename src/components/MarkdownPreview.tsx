@@ -10,68 +10,36 @@ interface ParsedBlock {
   language?: string;
 }
 
-function parseInline(
-  text: string,
-): { text: string; inlineCode: boolean; bold: boolean; italic: boolean }[] {
+function parseInline(text: string): { text: string; inlineCode: boolean; bold: boolean; italic: boolean }[] {
   // First, handle inline code (backticks)
   // Then handle bold (**text**) and italic (*text*)
-  const segments: {
-    text: string;
-    inlineCode: boolean;
-    bold: boolean;
-    italic: boolean;
-  }[] = [];
-
+  const segments: { text: string; inlineCode: boolean; bold: boolean; italic: boolean }[] = [];
+  
   // Split by backticks first to preserve inline code
   const codeRegex = /`([^`]+)`|(\*\*[^*]+\*\*)|(\*[^*]+\*)|([^`*\n]+)/g;
   let match: RegExpExecArray | null;
-
+  
   while ((match = codeRegex.exec(text)) !== null) {
     if (match[1] !== undefined) {
       // Inline code
-      segments.push({
-        text: match[1],
-        inlineCode: true,
-        bold: false,
-        italic: false,
-      });
+      segments.push({ text: match[1], inlineCode: true, bold: false, italic: false });
     } else if (match[2] !== undefined) {
       // Bold
-      segments.push({
-        text: match[2].slice(2, -2),
-        inlineCode: false,
-        bold: true,
-        italic: false,
-      });
+      segments.push({ text: match[2].slice(2, -2), inlineCode: false, bold: true, italic: false });
     } else if (match[3] !== undefined) {
       // Italic
-      segments.push({
-        text: match[3].slice(1, -1),
-        inlineCode: false,
-        bold: false,
-        italic: true,
-      });
+      segments.push({ text: match[3].slice(1, -1), inlineCode: false, bold: false, italic: true });
     } else if (match[4] !== undefined) {
       // Plain text
-      segments.push({
-        text: match[4],
-        inlineCode: false,
-        bold: false,
-        italic: false,
-      });
+      segments.push({ text: match[4], inlineCode: false, bold: false, italic: false });
     }
   }
-
+  
   return segments;
 }
 
 function renderInline(
-  segments: {
-    text: string;
-    inlineCode: boolean;
-    bold: boolean;
-    italic: boolean;
-  }[],
+  segments: { text: string; inlineCode: boolean; bold: boolean; italic: boolean }[],
 ): JSX.Element[] {
   const elements: JSX.Element[] = [];
   let index = 0;
@@ -114,11 +82,7 @@ function parseMarkdown(content: string): ParsedBlock[] {
     if (trimmed.startsWith("```")) {
       if (inCodeBlock) {
         // Close code block
-        blocks.push({
-          type: "code-block",
-          content: codeContent,
-          language: codeLanguage,
-        });
+        blocks.push({ type: "code-block", content: codeContent, language: codeLanguage });
         inCodeBlock = false;
         codeContent = "";
         codeLanguage = "";
@@ -195,10 +159,7 @@ export function MarkdownPreview({ content }: MarkdownPreviewProps) {
         return <li key={i}>{renderInline(segments)}</li>;
       });
       elements.push(
-        <ul
-          key={index++}
-          className="list-disc list-inside space-y-1 my-2 text-on-surface-variant"
-        >
+        <ul key={index++} className="list-disc list-inside space-y-1 my-2 text-on-surface-variant">
           {listItems}
         </ul>,
       );
@@ -208,10 +169,7 @@ export function MarkdownPreview({ content }: MarkdownPreviewProps) {
     // Handle code blocks
     if (block.type === "code-block") {
       elements.push(
-        <pre
-          key={index++}
-          className="my-3 p-3 bg-surface-container-high rounded-md border border-white/5 overflow-x-auto"
-        >
+        <pre key={index++} className="my-3 p-3 bg-surface-container-high rounded-md border border-white/5 overflow-x-auto">
           <code className="font-jetbrains text-sm text-primary-container whitespace-pre-wrap">
             {block.content}
           </code>

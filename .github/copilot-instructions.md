@@ -47,7 +47,6 @@
 ### Mandatory Planning Phase
 
 All features require a plan in `docs/plans/` before implementation.
-
 - Regular plans: `docs/plans/<feature_name>.md`
 - Drift plans: `docs/plans/drifts/<YYYY-MM-DD-HH-MM>/<phase_number>_name.md`
 - Review/drift reports: `docs/review/<type>-YYYY-MM-DD.md`

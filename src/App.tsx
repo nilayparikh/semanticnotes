@@ -21,7 +21,7 @@ function App() {
       created_at: new Date().toISOString(),
       updated_ts: Date.now(),
     };
-    setNotes((prev) => [...prev, newNote]);
+    setNotes(prev => [...prev, newNote]);
     setSelectedNoteId(newNote.id);
   };
 
@@ -29,20 +29,13 @@ function App() {
     // Search logic will be connected to embedding pipeline later
   };
 
-  const selectedNote = notes.find((n) => n.id === selectedNoteId);
+  const selectedNote = notes.find(n => n.id === selectedNoteId);
 
   const handleUpdate = (data: { title?: string; content?: string }) => {
-    setNotes((prev) =>
-      prev.map((n) =>
-        n.id === selectedNoteId
-          ? {
-              ...n,
-              ...data,
-              updated_at: new Date().toISOString(),
-              updated_ts: Date.now(),
-            }
-          : n,
-      ),
+    setNotes(prev =>
+      prev.map(n =>
+        n.id === selectedNoteId ? { ...n, ...data, updated_at: new Date().toISOString(), updated_ts: Date.now() } : n
+      )
     );
   };
 
@@ -53,12 +46,8 @@ function App() {
         <div className="flex items-center justify-between">
           <h1 className="text-primary font-geist text-lg">SemanticNotes.ai</h1>
           <div className="flex gap-2">
-            <span className="glass-panel px-2 py-1 text-xs text-secondary">
-              ● WebGPU
-            </span>
-            <span className="glass-panel px-2 py-1 text-xs text-secondary">
-              ● SQLite
-            </span>
+            <span className="glass-panel px-2 py-1 text-xs text-secondary">● WebGPU</span>
+            <span className="glass-panel px-2 py-1 text-xs text-secondary">● SQLite</span>
           </div>
         </div>
       </header>

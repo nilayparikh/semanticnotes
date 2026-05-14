@@ -1,11 +1,21 @@
-# Plan 04b — Chat UI
-
-**Status**: `Draft`  
-**Author**: Planning Agent  
-**Created**: 2026-05-12  
-**Last Updated**: 2026-05-12  
-**Priority**: `High`  
-**Estimated Effort**: 5 Story Points / 1 Day
+---
+title: "Plan 04b — Chat UI"
+plan_id: "04b_chat-ui"
+status: "Draft"
+author: "Planning Agent"
+created: "2026-05-12"
+updated: "2026-05-12"
+completed: null
+priority: "High"
+story_points: 5
+effort_days: 1
+depends_on: [04a_rag-pipeline]
+depends_on_external: []
+phase: 4
+drift_of: null
+archived_date: null
+archive_log: null
+---
 
 ## 1. Objective
 
@@ -30,13 +40,13 @@ Implement the chat UI components: streaming tokens, chat thread management, and 
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                      | Status |
-| --- | ---------------------------------------------- | ------ |
-| 1   | Chat input field is displayed with send button | `[ ]`  |
-| 2   | Tokens stream word-by-word with 50ms delay     | `[ ]`  |
-| 3   | Chat thread persists in localStorage           | `[ ]`  |
-| 4   | Model selector shows available models          | `[ ]`  |
-| 5   | Chat history is scrollable                     | `[ ]`  |
+| #   | Criterion                                      | Verification Method | Status |
+| --- | ---------------------------------------------- | ------------------- | ------ |
+| 1   | Chat input field is displayed with send button | Manual Check        | `[ ]`  |
+| 2   | Tokens stream word-by-word with 50ms delay     | Unit Test           | `[ ]`  |
+| 3   | Chat thread persists in localStorage           | Integration Test    | `[ ]`  |
+| 4   | Model selector shows available models          | Manual Check        | `[ ]`  |
+| 5   | Chat history is scrollable                     | Manual Check        | `[ ]`  |
 
 ## 4. TDD Test Cases
 

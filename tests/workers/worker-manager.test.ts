@@ -4,29 +4,20 @@ import { WorkerManager } from "@/workers/worker-manager";
 // ── Mock Worker Factory ──────────────────────────────────────────────────
 
 function createMockWorker(): Mocked<Worker> {
-  const handlers: Array<{
-    event: string;
-    callback: (e: MessageEvent) => void;
-  }> = [];
-
+  const handlers: Array<{ event: string; callback: (e: MessageEvent) => void }> = [];
+  
   const mockWorker = {
     postMessage: vi.fn(),
     terminate: vi.fn(),
     onmessage: null as ((event: MessageEvent) => void) | null,
     onerror: null as ((event: ErrorEvent) => void) | null,
-    addEventListener: vi.fn(
-      (event: string, callback: (e: MessageEvent) => void) => {
-        handlers.push({ event, callback });
-      },
-    ),
-    removeEventListener: vi.fn(
-      (event: string, callback: (e: MessageEvent) => void) => {
-        const idx = handlers.findIndex(
-          (h) => h.event === event && h.callback === callback,
-        );
-        if (idx !== -1) handlers.splice(idx, 1);
-      },
-    ),
+    addEventListener: vi.fn((event: string, callback: (e: MessageEvent) => void) => {
+      handlers.push({ event, callback });
+    }),
+    removeEventListener: vi.fn((event: string, callback: (e: MessageEvent) => void) => {
+      const idx = handlers.findIndex(h => h.event === event && h.callback === callback);
+      if (idx !== -1) handlers.splice(idx, 1);
+    }),
     _handlers: handlers,
   } as unknown as Mocked<Worker>;
   return mockWorker;
