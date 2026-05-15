@@ -50,9 +50,14 @@ archive_reason: \"Completed\"
 
 ## Archived Plans Index
 
-| Plan ID | Original Path | Archived Date | Archive Log |
-| ------- | ------------- | ------------- | ----------- |
-| (empty) | —             | —             | —           |
+| Plan ID                                      | Original Path                                               | Archived Date | Archive Log                                                                |
+| -------------------------------------------- | ----------------------------------------------------------- | ------------- | -------------------------------------------------------------------------- |
+| drift-2026-05-12-13-22-01_context_alignment  | docs/plans/drifts/2026-05-12-13-22/01_context_alignment.md  | 2026-05-15    | docs/plans/logs/2026-05-15-drift-2026-05-12-13-22-01_context_alignment.md  |
+| drift-2026-05-12-13-22-02_design_system      | docs/plans/drifts/2026-05-12-13-22/02_design_system.md      | 2026-05-15    | docs/plans/logs/2026-05-15-drift-2026-05-12-13-22-02_design_system.md      |
+| drift-2026-05-12-13-22-03_ui_theme           | docs/plans/drifts/2026-05-12-13-22/03_ui_theme.md           | 2026-05-15    | docs/plans/logs/2026-05-12-03_ui_theme.md                                  |
+| drift-2026-05-12-13-22-04_layout_structure   | docs/plans/drifts/2026-05-12-13-22/04_layout_structure.md   | 2026-05-15    | docs/plans/logs/2026-05-15-drift-2026-05-12-13-22-04_layout_structure.md   |
+| drift-2026-05-12-13-22-05_missing_components | docs/plans/drifts/2026-05-12-13-22/05_missing_components.md | 2026-05-15    | docs/plans/logs/2026-05-15-drift-2026-05-12-13-22-05_missing_components.md |
+| drift-2026-05-12-13-22-06_code_quality       | docs/plans/drifts/2026-05-12-13-22/06_code_quality.md       | 2026-05-15    | docs/plans/logs/2026-05-15-drift-2026-05-12-13-22-06_code_quality.md       |
 
 ## Notes
 

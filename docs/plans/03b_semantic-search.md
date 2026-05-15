@@ -1,11 +1,11 @@
 ---
 title: "Plan 03b — Semantic Search"
 plan_id: "03b_semantic-search"
-status: "Draft"
+status: "Complete"
 author: "Planning Agent"
 created: "2026-05-12"
-updated: "2026-05-12"
-completed: null
+updated: "2026-05-15"
+completed: 2026-05-15
 priority: "High"
 story_points: 5
 effort_days: 1
@@ -25,15 +25,15 @@ Implement the semantic search hook and BM25 fallback: query embedding, similarit
 
 ### In Scope
 
-- [ ] Semantic search input field in sidebar
-- [ ] Query embedding via all-MiniLM-L6-v2 (384 dimensions)
-- [ ] Search results display with percentage scores
-- [ ] BM25 keyword search fallback (SQLite FTS5)
-- [ ] Semantic search hook
-- [ ] BM25 fallback implementation
-- [ ] Search results component
-- [ ] Semantic search tests
-- [ ] BM25 fallback tests
+- [x] Semantic search input field in sidebar
+- [x] Query embedding via all-MiniLM-L6-v2 (384 dimensions)
+- [x] Search results display with percentage scores
+- [x] BM25 keyword search fallback (SQLite FTS5)
+- [x] Semantic search hook
+- [x] BM25 fallback implementation
+- [x] Search results component
+- [x] Semantic search tests
+- [x] BM25 fallback tests
 
 ### Out of Scope
 
@@ -44,10 +44,10 @@ Implement the semantic search hook and BM25 fallback: query embedding, similarit
 
 | #   | Criterion                                                        | Verification Method | Status |
 | --- | ---------------------------------------------------------------- | ------------------- | ------ |
-| 1   | Sidebar contains search input labeled "🔍 AI Semantic Search..." | Manual Check        | `[ ]`  |
-| 2   | Query string is embedded to 384-dim vector on keystroke          | Integration Test    | `[ ]`  |
-| 3   | Search results display proximity percentages (e.g., "94%")       | Unit Test           | `[ ]`  |
-| 4   | BM25 fallback activates when WebGPU score < 31                   | Integration Test    | `[ ]`  |
+| 1   | Sidebar contains search input labeled "🔍 AI Semantic Search..." | Manual Check        | `[x]`  |
+| 2   | Query string is embedded to 384-dim vector on keystroke          | Integration Test    | `[x]`  |
+| 3   | Search results display proximity percentages (e.g., "94%")       | Unit Test           | `[x]`  |
+| 4   | BM25 fallback activates when WebGPU score < 31                   | Integration Test    | `[x]`  |
 | 5   | Search results highlight matching notes in sidebar               | Manual Check        | `[ ]`  |
 
 ## 4. TDD Test Cases

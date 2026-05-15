@@ -37,14 +37,7 @@
 
 ## Drift Plans
 
-| Plan ID                                      | Title                             | Status   | Parent Drift     |
-| -------------------------------------------- | --------------------------------- | -------- | ---------------- |
-| drift-2026-05-12-13-22-01_context_alignment  | Context & Documentation Alignment | Complete | 2026-05-12-13-22 |
-| drift-2026-05-12-13-22-02_design_system      | Design System Foundation          | Complete | 2026-05-12-13-22 |
-| drift-2026-05-12-13-22-03_ui_theme           | UI Theme Alignment                | Complete | 2026-05-12-13-22 |
-| drift-2026-05-12-13-22-04_layout_structure   | Layout Structure                  | Complete | 2026-05-12-13-22 |
-| drift-2026-05-12-13-22-05_missing_components | Missing Components                | Complete | 2026-05-12-13-22 |
-| drift-2026-05-12-13-22-06_code_quality       | Code Quality & Bug Fixes          | Complete | 2026-05-12-13-22 |
+**All drift plans have been archived.** See `docs/plans/archive/drifts/` and `docs/plans/logs/` for records.
 
 ---
 

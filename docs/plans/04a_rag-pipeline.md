@@ -1,11 +1,11 @@
 ---
 title: "Plan 04a — RAG Pipeline"
 plan_id: "04a_rag-pipeline"
-status: "Draft"
+status: "Complete"
 author: "Planning Agent"
 created: "2026-05-12"
-updated: "2026-05-12"
-completed: null
+updated: "2026-05-15"
+completed: "2026-05-15"
 priority: "High"
 story_points: 5
 effort_days: 1
@@ -25,13 +25,13 @@ Build the RAG (Retrieval-Augmented Generation) pipeline: query embedding, contex
 
 ### In Scope
 
-- [ ] RAG query embedding (reuse all-MiniLM-L6-v2)
-- [ ] Context window selection (top-N notes by cosine similarity)
-- [ ] Token budgeting (256 tokens per note, max 128 notes)
-- [ ] RAG pipeline hook
-- [ ] Context window management
-- [ ] RAG pipeline tests
-- [ ] Token budgeting tests
+- [x] RAG query embedding (reuse all-MiniLM-L6-v2)
+- [x] Context window selection (top-N notes by cosine similarity)
+- [x] Token budgeting (256 tokens per note, max 128 notes)
+- [x] RAG pipeline hook
+- [x] Context window management
+- [x] RAG pipeline tests
+- [x] Token budgeting tests
 
 ### Out of Scope
 
@@ -42,11 +42,11 @@ Build the RAG (Retrieval-Augmented Generation) pipeline: query embedding, contex
 
 | #   | Criterion                                          | Verification Method | Status |
 | --- | -------------------------------------------------- | ------------------- | ------ |
-| 1   | RAG query selects top-N notes by cosine similarity | Unit Test           | `[ ]`  |
-| 2   | Context window is limited to 256 tokens per note   | Unit Test           | `[ ]`  |
-| 3   | Token budgeting prevents overflow (max 128 notes)  | Unit Test           | `[ ]`  |
-| 4   | RAG pipeline is called before chat completion      | Integration Test    | `[ ]`  |
-| 5   | Context window is updated on note changes          | Integration Test    | `[ ]`  |
+| 1   | RAG query selects top-N notes by cosine similarity | Unit Test           | `[x]`  |
+| 2   | Context window is limited to 256 tokens per note   | Unit Test           | `[x]`  |
+| 3   | Token budgeting prevents overflow (max 128 notes)  | Unit Test           | `[x]`  |
+| 4   | RAG pipeline is called before chat completion      | Integration Test    | `[x]`  |
+| 5   | Context window is updated on note changes          | Integration Test    | `[x]`  |
 
 ## 4. TDD Test Cases
 
@@ -119,8 +119,8 @@ Reuse embedding pipeline from Plan 03a. Select top-N notes by cosine similarity,
 
 ## 10. Completion Checklist
 
-- [ ] All acceptance criteria met
-- [ ] Tests written and passing
-- [ ] Code reviewed
-- [ ] Documentation updated
-- [ ] No regressions in existing features
+- [x] All acceptance criteria met
+- [x] Tests written and passing
+- [x] Code reviewed
+- [x] Documentation updated
+- [x] No regressions in existing features

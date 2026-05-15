@@ -32,15 +32,15 @@ Convert all existing UI components from the current light theme to the approved 
 
 ## 3. Acceptance Criteria
 
-| #   | Criterion                                               | Status |
-| --- | ------------------------------------------------------- | ------ |
-| 1   | `NoteList.tsx` uses glass-panel styling                 | `[x]`  |
-| 2   | `NoteList.tsx` has `hover:bg-white/5` hover state       | `[x]`  |
-| 3   | `NoteList.tsx` has `aria-selected` and `role="option"`  | `[x]`  |
-| 4   | `NoteList.tsx` uses `useMemo` for sorting               | `[x]`  |
-| 5   | `NoteEditor.tsx` uses dark theme styling                | `[x]`  |
-| 6   | `NewNoteButton.tsx` uses cyan primary styling           | `[x]`  |
-| 7   | `MarkdownPreview.tsx` handles bold, italic, code blocks | `[x]`  |
+| #   | Criterion                                         | Status |
+| --- | ------------------------------------------------- | ------ |
+| 1   | `NoteList.tsx` uses glass-panel styling           | `[x]`  |
+| 2   | `NoteList.tsx` has `hover:bg-white/5` hover state | `[x]`  |
+| 3   | `NoteList.tsx` has `aria-selected` and `role="option"` | `[x]` |
+| 4   | `NoteList.tsx` uses `useMemo` for sorting        | `[x]`  |
+| 5   | `NoteEditor.tsx` uses dark theme styling          | `[x]`  |
+| 6   | `NewNoteButton.tsx` uses cyan primary styling    | `[x]`  |
+| 7   | `MarkdownPreview.tsx` handles bold, italic, code blocks | `[x]` |
 
 ## 4. TDD Test Cases
 
@@ -52,7 +52,7 @@ describe("NoteList Accessibility", () => {
   it("should have aria-selected on active note", () => {
     // Verify aria-selected="true" on active item
   });
-
+  
   it("should have role='option' on each note", () => {
     // Verify role="option" on list items
   });
@@ -78,19 +78,18 @@ Replace light theme classes with glassmorphic dark theme:
 
 ```tsx
 // src/components/NoteList.tsx
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 export function NoteList({ notes, selectedId, onSelect }) {
   const sortedNotes = useMemo(() => {
-    return [...notes].sort(
-      (a, b) =>
-        new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
+    return [...notes].sort((a, b) => 
+      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
     );
   }, [notes]);
 
   return (
     <nav role="listbox" aria-label="Notes">
-      {sortedNotes.map((note) => (
+      {sortedNotes.map(note => (
         <div
           key={note.id}
           role="option"
@@ -163,28 +162,28 @@ export function NewNoteButton({ onClick }) {
 
 ## 7. Risks & Mitigations
 
-| Risk                        | Impact | Mitigation                           |
-| --------------------------- | ------ | ------------------------------------ |
-| Component styling conflicts | Medium | Use utility classes consistently     |
-| Accessibility regression    | High   | Verify ARIA attributes after changes |
-| Performance regression      | Medium | Test `useMemo` optimization          |
+| Risk | Impact | Mitigation |
+|------|--------|-----------|
+| Component styling conflicts | Medium | Use utility classes consistently |
+| Accessibility regression | High | Verify ARIA attributes after changes |
+| Performance regression | Medium | Test `useMemo` optimization |
 
 ## 8. Test Strategy
 
-| Test Type | Scope                  | Location                             |
-| --------- | ---------------------- | ------------------------------------ |
-| Unit      | NoteList accessibility | `tests/components/NoteList.test.tsx` |
-| Unit      | NoteList performance   | `tests/components/NoteList.test.tsx` |
-| Unit      | Component styling      | `tests/components/`                  |
+| Test Type | Scope | Location |
+|-----------|-------|----------|
+| Unit | NoteList accessibility | `tests/components/NoteList.test.tsx` |
+| Unit | NoteList performance | `tests/components/NoteList.test.tsx` |
+| Unit | Component styling | `tests/components/` |
 
 ## 9. Files to Create / Modify
 
-| File                                 | Action | Description                                          |
-| ------------------------------------ | ------ | ---------------------------------------------------- |
-| `src/components/NoteList.tsx`        | Modify | Apply glassmorphic styling, ARIA attributes, useMemo |
-| `src/components/NoteEditor.tsx`      | Modify | Apply dark theme styling                             |
-| `src/components/NewNoteButton.tsx`   | Modify | Apply cyan primary styling                           |
-| `src/components/MarkdownPreview.tsx` | Modify | Improve markdown parser                              |
+| File | Action | Description |
+|------|--------|-------------|
+| `src/components/NoteList.tsx` | Modify | Apply glassmorphic styling, ARIA attributes, useMemo |
+| `src/components/NoteEditor.tsx` | Modify | Apply dark theme styling |
+| `src/components/NewNoteButton.tsx` | Modify | Apply cyan primary styling |
+| `src/components/MarkdownPreview.tsx` | Modify | Improve markdown parser |
 
 ## 10. Completion Checklist
 

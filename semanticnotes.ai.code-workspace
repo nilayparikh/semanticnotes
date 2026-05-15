@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"explorer.compactFolders": true,
+		"explorer.sortOrder": "type",
+		"chat.includeApplyingInstructions": true,
+		"chat.includeReferencedInstructions": true,
+		"chat.useAgentsMdFile": true,
+		"chat.instructionsFilesLocations": {
+			".github/instructions": true,
+			".claude/rules": true,
+			"~/.copilot/instructions": false,
+			"~/.claude/rules": false
+		},
+		"chat.useCustomizationsInParentRepositories": true,
+		"tailwindCSS.includeLanguages": [
+			"typescript",
+			"html",
+			"markdown"
+		],
+		"terminal.integrated.defaultProfile.windows": "PowerShell",
+		"terminal.integrated.shellIntegration.enabled": true
+	}
+}

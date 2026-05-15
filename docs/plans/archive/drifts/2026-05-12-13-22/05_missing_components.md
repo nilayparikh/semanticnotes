@@ -1,10 +1,10 @@
 ---
 title: "Plan 05 — Missing Components"
 plan_id: "drift-2026-05-12-13-22-05_missing_components"
-status: "Complete"
+status: "Archived"
 author: "Change Agent"
 created: "2026-05-12"
-updated: "2026-05-12"
+updated: "2026-05-15"
 completed: "2026-05-12"
 priority: "Critical"
 story_points: 8
@@ -15,8 +15,8 @@ phase: null
 parent_drift_index: "docs/plans/drifts/README.md"
 source_drifts: ["#3", "#4", "#20", "#21"]
 drift_of: null
-archived_date: null
-archive_log: null
+archived_date: "2026-05-15"
+archive_log: "docs/plans/logs/2026-05-15-drift-2026-05-12-13-22-05_missing_components.md"
 ---
 
 ## 1. Objective

@@ -1,11 +1,11 @@
 ---
 title: "Plan 01b — Data & Model Layer"
 plan_id: "01b_data-model-layer"
-status: "In-Progress"
+status: "Complete"
 author: "Planning Agent"
 created: "2026-05-12"
 updated: "2026-05-12"
-completed: null
+completed: "2026-05-12"
 priority: "High"
 story_points: 6
 effort_days: 1.5
@@ -17,7 +17,7 @@ archived_date: null
 archive_log: null
 ---
 
-> **Peer Review Note**: 0% of acceptance criteria are implemented. This plan is the critical path blocker for Plans 03a through 05b. The `Note` type exists (`src/types/note.ts`) but the SQLite worker, Web Locks wrapper, ModelManager, and loading state hooks are all pending.
+> **Completion Note**: All 5 acceptance criteria implemented and verified with 30 passing tests. Full test suite (193 tests) passes with no regressions.
 
 ## 1. Objective
 
@@ -27,14 +27,14 @@ Build the data persistence and model runtime layer: wa-sqlite WASM worker, Web L
 
 ### In Scope
 
-- [ ] wa-sqlite WASM worker with OPFS persistence
-- [ ] Web Locks API concurrency management
-- [ ] ModelManager class (sequential loading, Cache API)
-- [ ] Loading state orchestration (useReducer pattern)
-- [ ] Database schema creation
-- [ ] Database service tests
-- [ ] ModelManager tests
-- [ ] Loading state tests
+- [x] wa-sqlite WASM worker with OPFS persistence
+- [x] Web Locks API concurrency management
+- [x] ModelManager class (sequential loading, Cache API)
+- [x] Loading state orchestration (useReducer pattern)
+- [x] Database schema creation
+- [x] Database service tests
+- [x] ModelManager tests
+- [x] Loading state tests
 
 ### Out of Scope
 
@@ -45,11 +45,11 @@ Build the data persistence and model runtime layer: wa-sqlite WASM worker, Web L
 
 | #   | Criterion                                                                     | Verification Method | Status |
 | --- | ----------------------------------------------------------------------------- | ------------------- | ------ |
-| 1   | wa-sqlite initializes and mounts OPFS database file                           | Unit Test           | `[ ]`  |
-| 2   | Database schema creates `notes` and `note_embeddings` tables                  | Unit Test           | `[ ]`  |
-| 3   | Web Locks API provides exclusive/shared lock modes                            | Unit Test           | `[ ]`  |
-| 4   | ModelManager loads embedding model sequentially without exceeding VRAM budget | Integration Test    | `[ ]`  |
-| 5   | Loading state reducer tracks all 4 component states correctly                 | Unit Test           | `[ ]`  |
+| 1   | wa-sqlite initializes and mounts OPFS database file                           | Unit Test           | `[x]`  |
+| 2   | Database schema creates `notes` and `note_embeddings` tables                  | Unit Test           | `[x]`  |
+| 3   | Web Locks API provides exclusive/shared lock modes                            | Unit Test           | `[x]`  |
+| 4   | ModelManager loads embedding model sequentially without exceeding VRAM budget | Integration Test    | `[x]`  |
+| 5   | Loading state reducer tracks all 4 component states correctly                 | Unit Test           | `[x]`  |
 
 ## 4. TDD Test Cases
 
