@@ -2,17 +2,19 @@
 name: sn_agent
 description: "Planning agent for SemanticNotes.ai. Handles task breakdown, TDD verification, and skill orchestration."
 tools:
-  - vscode
+  - vscode/memory
+  - vscode/resolveMemoryFileUri
+  - vscode/runCommand
+  - vscode/askQuestions
+  - vscode/toolSearch
   - execute/getTerminalOutput
   - execute/killTerminal
   - execute/sendToTerminal
   - execute/runTask
   - execute/createAndRunTask
   - execute/runInTerminal
-  - execute/runTests
   - read/problems
   - read/readFile
-  - read/viewImage
   - read/terminalSelection
   - read/terminalLastCommand
   - read/getTaskOutput
@@ -23,8 +25,6 @@ tools:
   - edit/rename
   - search
   - web
-  - browser
-  - "microsoftdocs/mcp/*"
   - todo
 ---
 

@@ -1,11 +1,11 @@
 ---
 title: "Plan 04b — Chat UI"
 plan_id: "04b_chat-ui"
-status: "Draft"
+status: "Complete"
 author: "Planning Agent"
 created: "2026-05-12"
-updated: "2026-05-12"
-completed: null
+updated: "2026-05-15"
+completed: "2026-05-15"
 priority: "High"
 story_points: 5
 effort_days: 1
@@ -42,11 +42,11 @@ Implement the chat UI components: streaming tokens, chat thread management, and 
 
 | #   | Criterion                                      | Verification Method | Status |
 | --- | ---------------------------------------------- | ------------------- | ------ |
-| 1   | Chat input field is displayed with send button | Manual Check        | `[ ]`  |
-| 2   | Tokens stream word-by-word with 50ms delay     | Unit Test           | `[ ]`  |
-| 3   | Chat thread persists in localStorage           | Integration Test    | `[ ]`  |
-| 4   | Model selector shows available models          | Manual Check        | `[ ]`  |
-| 5   | Chat history is scrollable                     | Manual Check        | `[ ]`  |
+| 1   | Chat input field is displayed with send button | Manual Check        | `[x]`  |
+| 2   | Tokens stream word-by-word with 50ms delay     | Unit Test           | `[x]`  |
+| 3   | Chat thread persists in localStorage           | Integration Test    | `[x]`  |
+| 4   | Model selector shows available models          | Manual Check        | `[x]`  |
+| 5   | Chat history is scrollable                     | Manual Check        | `[x]`  |
 
 ## 4. TDD Test Cases
 

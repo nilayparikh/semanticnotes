@@ -57,6 +57,8 @@ Return only a 2-sentence summary of your changes and any exported function names
 
 ## 5. When to Use Sub-Agents
 
+**Concurrency Limit**: Maximum **2 concurrent sub-agents** per main agent session. Queue excess tasks for sequential rounds.
+
 | Scenario                | Sub-Agent Type    | Example                           |
 | ----------------------- | ----------------- | --------------------------------- |
 | **Component Creation**  | UI Worker         | Create `NoteList.tsx` component   |
@@ -71,10 +73,11 @@ Return only a 2-sentence summary of your changes and any exported function names
 ## 6. Sub-Agent Execution Principles
 
 1. **Narrow Scope**: Each sub-agent owns 1-3 files maximum.
-2. **Independent Execution**: Sub-agents run in parallel when possible.
-3. **Strict Boundaries**: Sub-agents only modify files explicitly assigned to them.
-4. **Summary Output**: Each sub-agent returns a concise summary (2 sentences).
-5. **Verification**: Main agent validates all sub-agent outputs before presenting to user.
+2. **Concurrency Limit**: Maximum 2 concurrent sub-agents per session. Queue additional tasks.
+3. **Independent Execution**: Sub-agents run in parallel when possible (up to limit).
+4. **Strict Boundaries**: Sub-agents only modify files explicitly assigned to them.
+5. **Summary Output**: Each sub-agent returns a concise summary (2 sentences).
+6. **Verification**: Main agent validates all sub-agent outputs before presenting to user.
 
 ---
 
@@ -89,15 +92,20 @@ Return only a 2-sentence summary of your changes and any exported function names
 2. Implement `embedding-worker.ts`
 3. Write test suite
 
-### Step 2: Delegate
+### Step 2: Delegate (Max 2 Concurrent)
+
+**Round 1** (Parallel):
 
 - Sub-agent 1: Hook implementation
 - Sub-agent 2: Worker module
+
+**Round 2** (After Round 1 completes):
+
 - Sub-agent 3: Test suite
 
 ### Step 3: Aggregate
 
-- Collect summaries
+- Collect summaries from each round
 - Validate outputs
 - Present final report
 ```
