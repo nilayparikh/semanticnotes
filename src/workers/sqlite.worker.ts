@@ -10,6 +10,7 @@ import initSqlWasm, { Database } from "@vscode/sqlite3";
 import {
   NOTES_TABLE_SQL,
   EMBEDDINGS_TABLE_SQL,
+  NOTES_FTS_SQL,
   INDEXES_SQL,
 } from "@/types/database";
 
@@ -33,7 +34,10 @@ self.onmessage = async (e: MessageEvent) => {
         // Create schema
         database.exec(NOTES_TABLE_SQL);
         database.exec(EMBEDDINGS_TABLE_SQL);
-        database.exec(INDEXES_SQL);
+        database.exec(NOTES_FTS_SQL);
+        for (const idxSql of INDEXES_SQL) {
+          database.exec(idxSql);
+        }
 
         self.postMessage({ type: "MOUNTED" });
       } catch (error: any) {

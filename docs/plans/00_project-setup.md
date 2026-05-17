@@ -25,18 +25,18 @@ Scaffold the SemanticNotes.ai project structure: initialize Vite + React + TypeS
 
 ### In Scope
 
-- [ ] Initialize Vite project with React + TypeScript strict mode
-- [ ] Configure package.json with core dependencies
-- [ ] Set up TypeScript configuration (tsconfig.json)
-- [ ] Create .gitignore for Node.js + Vite + TypeScript
-- [ ] Configure Vitest testing framework
-- [ ] Configure Playwright E2E testing
-- [ ] Create directory structure (src/, tests/, docs/)
-- [ ] Set up Tailwind CSS configuration
-- [ ] Create Vite configuration (vite.config.ts)
-- [ ] Create initial index.html entry point
-- [ ] Set up ESLint configuration
-- [ ] Create .vscode workspace settings
+- [x] Initialize Vite project with React + TypeScript strict mode
+- [x] Configure package.json with core dependencies
+- [x] Set up TypeScript configuration (tsconfig.json)
+- [x] Create .gitignore for Node.js + Vite + TypeScript
+- [x] Configure Vitest testing framework
+- [x] Configure Playwright E2E testing
+- [x] Create directory structure (src/, tests/, docs/)
+- [x] Set up Tailwind CSS configuration
+- [x] Create Vite configuration (vite.config.ts)
+- [x] Create initial index.html entry point
+- [x] Set up ESLint configuration
+- [x] Create .vscode workspace settings
 
 ### Out of Scope
 
@@ -48,14 +48,14 @@ Scaffold the SemanticNotes.ai project structure: initialize Vite + React + TypeS
 
 | #   | Criterion                                         | Verification Method | Status |
 | --- | ------------------------------------------------- | ------------------- | ------ |
-| 1   | Vite dev server starts and serves index.html      | Manual Check        | `[ ]`  |
-| 2   | TypeScript strict mode compiles with zero errors  | Unit Test           | `[ ]`  |
-| 3   | Vitest runs with zero tests passing               | Unit Test           | `[ ]`  |
-| 4   | Playwright E2E suite runs with zero tests passing | Integration Test    | `[ ]`  |
-| 5   | Tailwind CSS processes and outputs CSS            | Manual Check        | `[ ]`  |
-| 6   | ESLint lints src/ with zero warnings              | Unit Test           | `[ ]`  |
-| 7   | .gitignore excludes node_modules, dist, .vite     | Manual Check        | `[ ]`  |
-| 8   | Directory structure matches architecture spec     | Unit Test           | `[ ]`  |
+| 1   | Vite dev server starts and serves index.html      | Manual Check        | `[x]`  |
+| 2   | TypeScript strict mode compiles with zero errors  | Unit Test           | `[x]`  |
+| 3   | Vitest runs with zero tests passing               | Unit Test           | `[x]`  |
+| 4   | Playwright E2E suite runs with zero tests passing | Integration Test    | `[x]`  |
+| 5   | Tailwind CSS processes and outputs CSS            | Manual Check        | `[x]`  |
+| 6   | ESLint lints src/ with zero warnings              | Unit Test           | `[x]`  |
+| 7   | .gitignore excludes node_modules, dist, .vite     | Manual Check        | `[x]`  |
+| 8   | Directory structure matches architecture spec     | Unit Test           | `[x]`  |
 
 ## 4. TDD Test Cases
 

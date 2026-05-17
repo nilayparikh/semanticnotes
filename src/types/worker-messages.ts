@@ -55,6 +55,26 @@ export interface WorkerErrorPayload {
   timestamp: number;
 }
 
+export interface LlmQueryPayload {
+  question: string;
+  context: string[];
+}
+
+export interface LlmTokenPayload {
+  token: string;
+  confidence: number;
+}
+
+export interface LlmDonePayload {
+  text: string;
+  duration: number;
+}
+
+export interface SqliteReadyPayload {
+  size: string;
+  path: string;
+}
+
 // ── Base Message ─────────────────────────────────────────────────────────
 
 interface WorkerMessageBase {
@@ -74,11 +94,15 @@ export type WorkerMessage =
       type: "embedding:result";
       payload: EmbeddingResultPayload;
     })
+  | (WorkerMessageBase & { type: "llm:query"; payload: LlmQueryPayload })
+  | (WorkerMessageBase & { type: "llm:token"; payload: LlmTokenPayload })
+  | (WorkerMessageBase & { type: "llm:done"; payload: LlmDonePayload })
   | (WorkerMessageBase & { type: "sqlite:query"; payload: SqliteQueryPayload })
   | (WorkerMessageBase & {
       type: "sqlite:result";
       payload: SqliteResultPayload;
     })
+  | (WorkerMessageBase & { type: "sqlite:ready"; payload: SqliteReadyPayload })
   | (WorkerMessageBase & { type: "worker:ping"; payload: WorkerPingPayload })
   | (WorkerMessageBase & { type: "worker:pong"; payload: WorkerPongPayload })
   | (WorkerMessageBase & { type: "worker:error"; payload: WorkerErrorPayload });

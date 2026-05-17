@@ -25,12 +25,12 @@ Build the worker messaging system: typed message contracts, WorkerManager class,
 
 ### In Scope
 
-- [ ] Worker message type definitions (discriminated union)
-- [ ] WorkerManager class with event routing
-- [ ] Worker health check (ping/pong)
-- [ ] WebGPU feature detection and capability scoring
-- [ ] Worker message contract tests
-- [ ] WorkerManager routing tests
+- [x] Worker message type definitions (discriminated union)
+- [x] WorkerManager class with event routing
+- [x] Worker health check (ping/pong)
+- [x] WebGPU feature detection and capability scoring
+- [x] Worker message contract tests
+- [x] WorkerManager routing tests
 
 ### Out of Scope
 
@@ -42,11 +42,11 @@ Build the worker messaging system: typed message contracts, WorkerManager class,
 
 | #   | Criterion                                                       | Verification Method | Status |
 | --- | --------------------------------------------------------------- | ------------------- | ------ |
-| 1   | Worker message types are TypeScript-strict discriminated unions | Unit Test           | `[ ]`  |
-| 2   | WorkerManager routes messages between UI and workers            | Unit Test           | `[ ]`  |
-| 3   | Worker health check ping/pong mechanism works                   | Unit Test           | `[ ]`  |
-| 4   | WebGPU detection returns accurate capability assessment         | Unit Test           | `[ ]`  |
-| 5   | WorkerManager terminates all workers on cleanup                 | Unit Test           | `[ ]`  |
+| 1   | Worker message types are TypeScript-strict discriminated unions | Unit Test           | `[x]`  |
+| 2   | WorkerManager routes messages between UI and workers            | Unit Test           | `[x]`  |
+| 3   | Worker health check ping/pong mechanism works                   | Unit Test           | `[x]`  |
+| 4   | WebGPU detection returns accurate capability assessment         | Unit Test           | `[x]`  |
+| 5   | WorkerManager terminates all workers on cleanup                 | Unit Test           | `[x]`  |
 
 ## 4. TDD Test Cases
 

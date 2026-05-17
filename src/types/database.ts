@@ -8,7 +8,7 @@
 // ── Row Types ─────────────────────────────────────────────────────────────
 
 export interface NoteRow {
-  id: number;
+  id: string;
   title: string;
   content: string;
   note_version: number;
@@ -19,7 +19,7 @@ export interface NoteRow {
 
 export interface NoteEmbeddingRow {
   id: number;
-  note_id: number;
+  note_id: string;
   chunk_index: number;
   chunk_text: string | null;
   embedding: BufferSource; // BLOB stored as ArrayBuffer/Uint8Array
@@ -59,7 +59,7 @@ export interface DbServiceInterface {
 // ── Schema SQL Constants ──────────────────────────────────────────────────
 
 export const NOTES_TABLE_SQL = `CREATE TABLE IF NOT EXISTS notes (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  id TEXT PRIMARY KEY,
   title TEXT NOT NULL DEFAULT '',
   content TEXT NOT NULL DEFAULT '',
   note_version INTEGER NOT NULL DEFAULT 1,
@@ -70,7 +70,7 @@ export const NOTES_TABLE_SQL = `CREATE TABLE IF NOT EXISTS notes (
 
 export const EMBEDDINGS_TABLE_SQL = `CREATE TABLE IF NOT EXISTS note_embeddings (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  note_id INTEGER NOT NULL,
+  note_id TEXT NOT NULL,
   chunk_index INTEGER NOT NULL DEFAULT 0,
   chunk_text TEXT,
   embedding BLOB NOT NULL,
@@ -82,6 +82,8 @@ export const EMBEDDINGS_TABLE_SQL = `CREATE TABLE IF NOT EXISTS note_embeddings 
   FOREIGN KEY (note_id) REFERENCES notes(id),
   UNIQUE(note_id, chunk_index)
 )`;
+
+export const NOTES_FTS_SQL = `CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(title, content, content='notes')`;
 
 export const INDEXES_SQL = [
   `CREATE INDEX idx_notes_updated_at ON notes(updated_at DESC)`,

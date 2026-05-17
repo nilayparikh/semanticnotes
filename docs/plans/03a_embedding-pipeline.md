@@ -4,7 +4,7 @@ plan_id: "03a_embedding-pipeline"
 status: "Complete"
 author: "Planning Agent"
 created: "2026-05-12"
-updated: "2026-05-12"
+updated: "2026-05-17"
 completed: 2026-05-12
 priority: "High"
 story_points: 5
@@ -42,9 +42,9 @@ Build the embedding pipeline: text chunking, cosine similarity computation, and 
 | #   | Criterion                                                    | Verification Method | Status |
 | --- | ------------------------------------------------------------ | ------------------- | ------ |
 | 1   | Text is chunked into 256-token windows with 64-token overlap | Unit Test           | `[x]`  |
-| 2   | 384-dim embedding is computed for each chunk                 | Integration Test    | `[x]`  |
+| 2   | 384-dim embedding is computed for each chunk                 | Integration Test    | `[ ]`  |
 | 3   | Cosine similarity scores are computed correctly              | Unit Test           | `[x]`  |
-| 4   | Embeddings are stored as Float32Array BLOBs in SQLite        | Integration Test    | `[x]`  |
+| 4   | Embeddings are stored as Float32Array BLOBs in SQLite        | Integration Test    | `[ ]`  |
 | 5   | Embedding debounce prevents race conditions                  | Unit Test           | `[x]`  |
 
 ## 4. TDD Test Cases
@@ -117,8 +117,9 @@ Follow `04_embedding_pipeline_spec.md` Section 4:
 | `src/utils/cosine-similarity.ts`           | Create | Cosine similarity computation     |
 | `src/utils/text-chunking.ts`               | Create | 256-token sliding window chunking |
 | `src/hooks/useEmbeddingPipeline.ts`        | Create | Embedding pipeline hook           |
-| `tests/workers/embedding-pipeline.test.ts` | Create | Embedding pipeline tests          |
 | `tests/utils/cosine-similarity.test.ts`    | Create | Cosine similarity tests           |
+| `tests/utils/text-chunking.test.ts`        | Create | Text chunking tests (11)          |
+| `tests/hooks/useEmbeddingPipeline.test.ts` | Create | Embedding pipeline hook tests (4) |
 
 ## 10. Completion Checklist
 

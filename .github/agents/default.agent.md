@@ -23,7 +23,6 @@ tools:
   - edit/createFile
   - edit/editFiles
   - edit/rename
-  - search
   - web
   - todo
 ---

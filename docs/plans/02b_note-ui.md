@@ -4,7 +4,7 @@ plan_id: "02b_note-ui"
 status: "Complete"
 author: "Planning Agent"
 created: "2026-05-12"
-updated: "2026-05-12"
+updated: "2026-05-17"
 completed: 2026-05-12
 priority: "High"
 story_points: 4
@@ -17,21 +17,22 @@ archived_date: null
 archive_log: null
 ---
 
-> **Peer Review Note**: All 4 components are implemented. Two improvements recommended: (1) Memoize sorted notes in `NoteList` with `useMemo`, (2) Add ARIA attributes (`aria-selected`, `role="option"`) for accessibility.
-> Implement the note UI components: Markdown editor with live preview, sidebar note list, and new note button. This is the view layer for note management — the user-facing interface for working with notes.
+> **Peer Review Note**: All 4 components are implemented. Improvements applied: (1) Sorted notes in `NoteList` memoized with `useMemo`, (2) ARIA attributes (`aria-selected`, `role="option"`) added for accessibility. ✅ Resolved.
+
+Implement the note UI components: Markdown editor with live preview, sidebar note list, and new note button. This is the view layer for note management — the user-facing interface for working with notes.
 
 ## 2. Scope
 
 ### In Scope
 
-- [ ] Markdown editor with borderless textarea
-- [ ] Live Markdown preview pane
-- [ ] Sidebar note list with hierarchical display
-- [ ] Active note highlighting with relative timestamp
-- [ ] "+ NEW NOTE" button
-- [ ] Markdown rendering component
-- [ ] Note list component
-- [ ] Component tests
+- [x] Markdown editor with borderless textarea
+- [x] Live Markdown preview pane
+- [x] Sidebar note list with hierarchical display
+- [x] Active note highlighting with relative timestamp
+- [x] "+ NEW NOTE" button
+- [x] Markdown rendering component
+- [x] Note list component
+- [x] Component tests
 
 ### Out of Scope
 
@@ -42,11 +43,11 @@ archive_log: null
 
 | #   | Criterion                                                     | Verification Method | Status |
 | --- | ------------------------------------------------------------- | ------------------- | ------ |
-| 1   | User can edit note content in a borderless Markdown textarea  | Unit Test           | `[ ]`  |
-| 2   | Live Markdown preview renders headers, paragraphs, and tables | Unit Test           | `[ ]`  |
-| 3   | Sidebar displays hierarchical note list                       | Manual Check        | `[ ]`  |
-| 4   | Active note is highlighted with high-contrast container       | Manual Check        | `[ ]`  |
-| 5   | Relative timestamps display ("Just now", "5 min ago")         | Unit Test           | `[ ]`  |
+| 1   | User can edit note content in a borderless Markdown textarea  | Unit Test           | `[x]`  |
+| 2   | Live Markdown preview renders headers, paragraphs, and tables | Unit Test           | `[x]`  |
+| 3   | Sidebar displays hierarchical note list                       | Manual Check        | `[x]`  |
+| 4   | Active note is highlighted with high-contrast container       | Manual Check        | `[x]`  |
+| 5   | Relative timestamps display ("Just now", "5 min ago")         | Unit Test           | `[x]`  |
 
 ## 4. TDD Test Cases
 
@@ -81,7 +82,7 @@ describe("NoteList", () => {
 
 ### 5.1 Markdown Preview
 
-Use a lightweight Markdown parser (e.g., `marked` or `react-markdown`) to render live preview. Split the editor pane: top half is textarea, bottom half is preview.
+Use a custom Markdown parser (no external library like `marked` or `react-markdown`) to render live preview. The custom parser handles headers, paragraphs, tables, inline code, and lists. Split the editor pane: top half is textarea, bottom half is preview.
 
 ### 5.2 Note List
 
@@ -117,8 +118,8 @@ Display notes in a hierarchical list. Highlight the active note with a high-cont
 
 ## 10. Completion Checklist
 
-- [ ] All acceptance criteria met
-- [ ] Tests written and passing
-- [ ] Code reviewed
-- [ ] Documentation updated
-- [ ] No regressions in existing features
+- [x] All acceptance criteria met
+- [x] Tests written and passing
+- [x] Code reviewed
+- [x] Documentation updated
+- [x] No regressions in existing features

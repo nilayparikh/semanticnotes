@@ -4,7 +4,7 @@ plan_id: "03b_semantic-search"
 status: "Complete"
 author: "Planning Agent"
 created: "2026-05-12"
-updated: "2026-05-15"
+updated: "2026-05-17"
 completed: 2026-05-15
 priority: "High"
 story_points: 5
@@ -16,6 +16,8 @@ drift_of: null
 archived_date: null
 archive_log: null
 ---
+
+> **Peer Review Note (2026-05-17)**: Query embedding (AC 2) currently uses a zero-filled stub, not actual model inference. Note highlighting in search results (AC 5) is also not yet implemented. Both criteria are pending.
 
 ## 1. Objective
 
@@ -45,7 +47,7 @@ Implement the semantic search hook and BM25 fallback: query embedding, similarit
 | #   | Criterion                                                        | Verification Method | Status |
 | --- | ---------------------------------------------------------------- | ------------------- | ------ |
 | 1   | Sidebar contains search input labeled "🔍 AI Semantic Search..." | Manual Check        | `[x]`  |
-| 2   | Query string is embedded to 384-dim vector on keystroke          | Integration Test    | `[x]`  |
+| 2   | Query string is embedded to 384-dim vector on keystroke          | Integration Test    | `[ ]`  |
 | 3   | Search results display proximity percentages (e.g., "94%")       | Unit Test           | `[x]`  |
 | 4   | BM25 fallback activates when WebGPU score < 31                   | Integration Test    | `[x]`  |
 | 5   | Search results highlight matching notes in sidebar               | Manual Check        | `[ ]`  |
@@ -111,19 +113,21 @@ Display results in sidebar with proximity percentages. Highlight matching notes 
 
 ## 9. Files to Create / Modify
 
-| File                                     | Action | Description                  |
-| ---------------------------------------- | ------ | ---------------------------- |
-| `src/hooks/useSemanticSearch.ts`         | Create | Semantic search hook         |
-| `src/hooks/useBm25Fallback.ts`           | Create | BM25 keyword search fallback |
-| `src/components/SemanticSearchInput.tsx` | Create | Sidebar search input         |
-| `src/components/SearchResults.tsx`       | Create | Search results display       |
-| `tests/hooks/useSemanticSearch.test.ts`  | Create | Semantic search tests        |
-| `tests/workers/bm25-fallback.test.ts`    | Create | BM25 fallback tests          |
+| File                                            | Action | Description                   |
+| ----------------------------------------------- | ------ | ----------------------------- |
+| `src/hooks/useSemanticSearch.ts`                | Create | Semantic search hook          |
+| `src/hooks/useBm25Fallback.ts`                  | Create | BM25 keyword search fallback  |
+| `src/components/SemanticSearchInput.tsx`        | Create | Sidebar search input          |
+| `src/components/SearchResults.tsx`              | Create | Search results display        |
+| `tests/hooks/useSemanticSearch.test.ts`         | Create | Semantic search tests         |
+| `tests/workers/bm25-fallback.test.ts`           | Create | BM25 fallback tests           |
+| `tests/components/SemanticSearchInput.test.tsx` | Create | SemanticSearchInput tests (4) |
+| `tests/components/SearchResults.test.tsx`       | Create | SearchResults tests (5)       |
 
 ## 10. Completion Checklist
 
-- [ ] All acceptance criteria met
-- [ ] Tests written and passing
+- [ ] All acceptance criteria met (AC 2 & 5 pending)
+- [x] Tests written and passing
 - [ ] Code reviewed
-- [ ] Documentation updated
+- [x] Documentation updated
 - [ ] No regressions in existing features

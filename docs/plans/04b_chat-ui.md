@@ -4,7 +4,7 @@ plan_id: "04b_chat-ui"
 status: "Complete"
 author: "Planning Agent"
 created: "2026-05-12"
-updated: "2026-05-15"
+updated: "2026-05-17"
 completed: "2026-05-15"
 priority: "High"
 story_points: 5
@@ -25,13 +25,13 @@ Implement the chat UI components: streaming tokens, chat thread management, and 
 
 ### In Scope
 
-- [ ] Chat input field with "Send" button
-- [ ] Streaming token display (word-by-word reveal)
-- [ ] Chat thread management (messages array)
-- [ ] Model selector dropdown (Qwen2.5-Coder-0.5B, MiniLM)
+- [x] Chat input field with "Send" button
+- [x] Streaming token display (word-by-word reveal)
+- [x] Chat thread management (messages array)
+- [x] Model selector dropdown (Qwen2.5-Coder-0.5B, MiniLM)
 - [ ] Chat history persistence in localStorage
-- [ ] Chat UI tests
-- [ ] Streaming tests
+- [x] Chat UI tests
+- [x] Streaming tests
 
 ### Out of Scope
 
@@ -44,7 +44,7 @@ Implement the chat UI components: streaming tokens, chat thread management, and 
 | --- | ---------------------------------------------- | ------------------- | ------ |
 | 1   | Chat input field is displayed with send button | Manual Check        | `[x]`  |
 | 2   | Tokens stream word-by-word with 50ms delay     | Unit Test           | `[x]`  |
-| 3   | Chat thread persists in localStorage           | Integration Test    | `[x]`  |
+| 3   | Chat thread persists in localStorage           | Integration Test    | `[ ]`  |
 | 4   | Model selector shows available models          | Manual Check        | `[x]`  |
 | 5   | Chat history is scrollable                     | Manual Check        | `[x]`  |
 
@@ -112,20 +112,25 @@ Store messages as an array of {role, content, timestamp}. Persist to localStorag
 
 ## 9. Files to Create / Modify
 
-| File                                   | Action | Description             |
-| -------------------------------------- | ------ | ----------------------- |
-| `src/components/ChatInput.tsx`         | Create | Chat input field        |
-| `src/components/ChatThread.tsx`        | Create | Chat thread display     |
-| `src/components/ModelSelector.tsx`     | Create | Model selector dropdown |
-| `src/hooks/useChatStreaming.ts`        | Create | Streaming token hook    |
-| `tests/components/ChatInput.test.tsx`  | Create | ChatInput tests         |
-| `tests/components/ChatThread.test.tsx` | Create | ChatThread tests        |
-| `tests/hooks/useChatStreaming.test.ts` | Create | Streaming tests         |
+| File                                      | Action | Description             |
+| ----------------------------------------- | ------ | ----------------------- |
+| `src/components/ChatInput.tsx`            | Create | Chat input field        |
+| `src/components/ChatThread.tsx`           | Create | Chat thread display     |
+| `src/components/ModelSelector.tsx`        | Create | Model selector dropdown |
+| `src/hooks/useChatStreaming.ts`           | Create | Streaming token hook    |
+| `tests/components/ChatInput.test.tsx`     | Create | ChatInput tests         |
+| `tests/components/ChatThread.test.tsx`    | Create | ChatThread tests        |
+| `tests/components/ModelSelector.test.tsx` | Create | ModelSelector tests     |
+| `tests/hooks/useChatStreaming.test.ts`    | Create | Streaming tests         |
 
 ## 10. Completion Checklist
 
 - [ ] All acceptance criteria met
-- [ ] Tests written and passing
-- [ ] Code reviewed
-- [ ] Documentation updated
-- [ ] No regressions in existing features
+- [x] Tests written and passing
+- [x] Code reviewed
+- [x] Documentation updated
+- [x] No regressions in existing features
+
+## 11. Peer Review Notes
+
+- **localStorage persistence**: Chat history is not yet persisted to `localStorage`. The `useChatStreaming` hook collects messages in-memory but lacks a `localStorage` sync layer. AC 3 remains unverified until this is implemented.

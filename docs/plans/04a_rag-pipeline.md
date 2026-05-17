@@ -4,7 +4,7 @@ plan_id: "04a_rag-pipeline"
 status: "Complete"
 author: "Planning Agent"
 created: "2026-05-12"
-updated: "2026-05-15"
+updated: "2026-05-17"
 completed: "2026-05-15"
 priority: "High"
 story_points: 5
@@ -45,7 +45,7 @@ Build the RAG (Retrieval-Augmented Generation) pipeline: query embedding, contex
 | 1   | RAG query selects top-N notes by cosine similarity | Unit Test           | `[x]`  |
 | 2   | Context window is limited to 256 tokens per note   | Unit Test           | `[x]`  |
 | 3   | Token budgeting prevents overflow (max 128 notes)  | Unit Test           | `[x]`  |
-| 4   | RAG pipeline is called before chat completion      | Integration Test    | `[x]`  |
+| 4   | RAG pipeline is called before chat completion      | Integration Test    | `[ ]`  |
 | 5   | Context window is updated on note changes          | Integration Test    | `[x]`  |
 
 ## 4. TDD Test Cases
@@ -109,13 +109,14 @@ Reuse embedding pipeline from Plan 03a. Select top-N notes by cosine similarity,
 
 ## 9. Files to Create / Modify
 
-| File                                  | Action | Description                   |
-| ------------------------------------- | ------ | ----------------------------- |
-| `src/hooks/useRagPipeline.ts`         | Create | RAG pipeline hook             |
-| `src/hooks/useContextWindow.ts`       | Create | Context window management     |
-| `src/utils/token-budgeting.ts`        | Create | Token counting and truncation |
-| `tests/hooks/useRagPipeline.test.ts`  | Create | RAG pipeline tests            |
-| `tests/utils/token-budgeting.test.ts` | Create | Token budgeting tests         |
+| File                                   | Action | Description                   |
+| -------------------------------------- | ------ | ----------------------------- |
+| `src/hooks/useRagPipeline.ts`          | Create | RAG pipeline hook             |
+| `src/hooks/useContextWindow.ts`        | Create | Context window management     |
+| `src/utils/token-budgeting.ts`         | Create | Token counting and truncation |
+| `tests/hooks/useRagPipeline.test.ts`   | Create | RAG pipeline tests            |
+| `tests/hooks/useContextWindow.test.ts` | Create | Context window tests          |
+| `tests/utils/token-budgeting.test.ts`  | Create | Token budgeting tests         |
 
 ## 10. Completion Checklist
 

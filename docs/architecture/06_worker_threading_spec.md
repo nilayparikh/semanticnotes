@@ -51,7 +51,7 @@ interface WorkerMessage<T extends WorkerMessageType> {
   type: T;
   payload: Extract<WorkerPayload, { type: T }>;
   timestamp: number;
-  version: "v1";
+  version: number;
 }
 
 type WorkerPayload =
@@ -79,7 +79,7 @@ interface WorkerMessage<T extends WorkerMessageType> {
   type: T;
   payload: Extract<WorkerPayload, { type: T }>;
   timestamp: number;
-  version: "v1"; // Future: 'v2', 'v3'
+  version: number; // Future: 2, 3
 }
 ```
 
