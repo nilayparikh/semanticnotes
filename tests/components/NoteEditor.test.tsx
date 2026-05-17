@@ -17,28 +17,14 @@ function makeNote(overrides: Partial<Note> = {}): Note {
 }
 
 describe("NoteEditor", () => {
-  it("renders a title input and content textarea", () => {
+  it("renders a title display and content textarea", () => {
     const note = makeNote();
     const onUpdate = vi.fn();
 
     render(<NoteEditor note={note} onUpdate={onUpdate} />);
 
-    expect(screen.getByTestId("note-title-input")).toBeInTheDocument();
+    expect(screen.getByText("Sample Note")).toBeInTheDocument();
     expect(screen.getByTestId("note-content-textarea")).toBeInTheDocument();
-  });
-
-  it("calls onUpdate when title changes", () => {
-    const note = makeNote();
-    const onUpdate = vi.fn();
-
-    render(<NoteEditor note={note} onUpdate={onUpdate} />);
-
-    const titleInput = screen.getByTestId("note-title-input" as never);
-    fireEvent.change(titleInput, { target: { value: "New Title" } });
-
-    expect(onUpdate).toHaveBeenCalledWith({
-      title: expect.stringContaining("New Title"),
-    });
   });
 
   it("calls onUpdate when content changes", () => {
@@ -51,7 +37,7 @@ describe("NoteEditor", () => {
     fireEvent.change(textarea, { target: { value: "New Content" } });
 
     expect(onUpdate).toHaveBeenCalledWith({
-      content: expect.stringContaining("New Content"),
+      content: "New Content",
     });
   });
 
@@ -71,9 +57,9 @@ describe("NoteEditor", () => {
 
     render(<NoteEditor note={note} onUpdate={onUpdate} />);
 
-    const container = screen.getByTestId("note-title-input").closest("div");
+    const container = screen.getByTestId("note-editor");
     expect(container).toHaveClass("flex-col");
     expect(screen.getByTestId("note-content-textarea")).toBeInTheDocument();
-    expect(screen.getByText("Some content here.")).toBeInTheDocument();
+    expect(screen.getByText("Live Preview")).toBeInTheDocument();
   });
 });

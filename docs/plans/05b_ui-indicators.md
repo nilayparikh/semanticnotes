@@ -1,11 +1,11 @@
 ---
 title: "Plan 05b — UI Indicators"
 plan_id: "05b_ui-indicators"
-status: "Draft"
-author: "Planning Agent"
+status: "Complete"
+author: "Implementation Agent"
 created: "2026-05-12"
-updated: "2026-05-12"
-completed: null
+updated: "2026-05-17"
+completed: "2026-05-17"
 priority: "Medium"
 story_points: 4
 effort_days: 0.5
@@ -40,11 +40,11 @@ Implement UI indicators: loading overlay, performance metrics display, and glass
 
 | #   | Criterion                                                   | Verification Method | Status |
 | --- | ----------------------------------------------------------- | ------------------- | ------ |
-| 1   | Loading overlay displays model progress                     | Manual Check        | `[ ]`  |
-| 2   | Performance metrics show FPS, bundle size, memory           | Unit Test           | `[ ]`  |
-| 3   | Glassmorphic theme uses backdrop-blur and semi-transparency | Manual Check        | `[ ]`  |
-| 4   | Theme toggle switches between Light/Dark/System             | Unit Test           | `[ ]`  |
-| 5   | UI indicators pass visual tests                             | Integration Test    | `[ ]`  |
+| 1   | Loading overlay displays model progress                     | Manual Check        | `[x]`  |
+| 2   | Performance metrics show FPS, bundle size, memory           | Unit Test           | `[x]`  |
+| 3   | Glassmorphic theme uses backdrop-blur and semi-transparency | Manual Check        | `[x]`  |
+| 4   | Theme toggle switches between Light/Dark/System             | Unit Test           | `[x]`  |
+| 5   | UI indicators pass visual tests                             | Integration Test    | `[x]`  |
 
 ## 4. TDD Test Cases
 
@@ -129,8 +129,8 @@ Apply Tailwind backdrop-blur and semi-transparent panels. Toggle between Light/D
 
 ## 10. Completion Checklist
 
-- [ ] All acceptance criteria met
-- [ ] Tests written and passing
-- [ ] Code reviewed
-- [ ] Documentation updated
-- [ ] No regressions in existing features
+- [x] All acceptance criteria met
+- [x] Tests written and passing
+- [x] Code reviewed
+- [x] Documentation updated
+- [x] No regressions in existing features

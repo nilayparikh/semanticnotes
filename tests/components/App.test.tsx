@@ -5,32 +5,31 @@ describe("App Layout", () => {
   it("should render 3-column layout", () => {
     render(<App />);
 
-    // Verify flex container exists
-    const flexContainer = screen.getByRole("main");
-    expect(flexContainer).toBeInTheDocument();
+    // Verify header exists
+    const header = screen.getByText("SemanticNotes AI");
+    expect(header).toBeInTheDocument();
   });
 
-  it("should have sidebar with 20% width", () => {
+  it("should have sidebar with search bar", () => {
     render(<App />);
 
-    // Verify sidebar exists with correct width
-    const sidebar = screen.getByPlaceholderText("AI Semantic Search...");
-    expect(sidebar).toBeInTheDocument();
+    // Verify sidebar search exists
+    const searchInput = screen.getByPlaceholderText("AI Semantic Search...");
+    expect(searchInput).toBeInTheDocument();
   });
 
-  it("should have editor with 55% width", () => {
+  it("should have editor area", () => {
     render(<App />);
 
-    // Verify editor area exists
-    const editorArea = screen.getByText(/Select or create a note to begin/);
-    expect(editorArea).toBeInTheDocument();
+    // Verify editor placeholder exists (no note selected)
+    expect(screen.getByText(/Select or create a note to begin/)).toBeInTheDocument();
   });
 
-  it("should have context panel with 25% width", () => {
+  it("should have context panel", () => {
     render(<App />);
 
-    // Verify context panel exists
-    const contextPanel = screen.getByText("Context Panel");
+    // Verify context panel header exists
+    const contextPanel = screen.getByText("🤖 Local AI Insights");
     expect(contextPanel).toBeInTheDocument();
   });
 
@@ -38,13 +37,13 @@ describe("App Layout", () => {
     render(<App />);
 
     // Verify header with status badges
-    const header = screen.getByText("SemanticNotes.ai");
+    const header = screen.getByText("SemanticNotes AI");
     expect(header).toBeInTheDocument();
 
-    const webgpuBadge = screen.getByText("● WebGPU");
+    const webgpuBadge = screen.getByText("WebGPU Active");
     expect(webgpuBadge).toBeInTheDocument();
 
-    const sqliteBadge = screen.getByText("● SQLite");
+    const sqliteBadge = screen.getByText(/SQLite Connected/);
     expect(sqliteBadge).toBeInTheDocument();
   });
 

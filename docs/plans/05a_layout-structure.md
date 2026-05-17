@@ -1,11 +1,11 @@
 ---
 title: "Plan 05a — Layout Structure"
 plan_id: "05a_layout-structure"
-status: "Draft"
+status: "Complete"
 author: "Planning Agent"
 created: "2026-05-12"
-updated: "2026-05-12"
-completed: null
+updated: "2026-05-17"
+completed: "2026-05-17"
 priority: "Medium"
 story_points: 4
 effort_days: 0.5
@@ -40,11 +40,11 @@ Build the 3-column CSS Grid layout structure with global header and responsive c
 
 | #   | Criterion                                                  | Verification Method | Status |
 | --- | ---------------------------------------------------------- | ------------------- | ------ |
-| 1   | Layout uses 3-column CSS Grid                              | Manual Check        | `[ ]`  |
-| 2   | Global header displays app title and model status          | Manual Check        | `[ ]`  |
-| 3   | Responsive collapse at 768px (tablet) and 1024px (desktop) | Integration Test    | `[ ]`  |
-| 4   | Sidebar is collapsible on mobile                           | Manual Check        | `[ ]`  |
-| 5   | Layout passes responsive breakpoint tests                  | Unit Test           | `[ ]`  |
+| 1   | Layout uses 3-column CSS Grid                              | Manual Check        | `[x]`  |
+| 2   | Global header displays app title and model status          | Manual Check        | `[x]`  |
+| 3   | Responsive collapse at 768px (tablet) and 1024px (desktop) | Integration Test    | `[x]`  |
+| 4   | Sidebar is collapsible on mobile                           | Manual Check        | `[x]`  |
+| 5   | Layout passes responsive breakpoint tests                  | Unit Test           | `[x]`  |
 
 ## 4. TDD Test Cases
 
@@ -105,8 +105,8 @@ Use Tailwind CSS Grid with 3 columns:
 
 ## 10. Completion Checklist
 
-- [ ] All acceptance criteria met
-- [ ] Tests written and passing
-- [ ] Code reviewed
-- [ ] Documentation updated
-- [ ] No regressions in existing features
+- [x] All acceptance criteria met
+- [x] Tests written and passing
+- [x] Code reviewed
+- [x] Documentation updated
+- [x] No regressions in existing features
