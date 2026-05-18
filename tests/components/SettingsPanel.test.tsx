@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { SettingsPanel } from "@/components/SettingsPanel";
 
 vi.mock("@/hooks/useTheme", () => ({
@@ -63,5 +63,35 @@ describe("SettingsPanel", () => {
 
     expect(screen.getByText("24MB")).toBeInTheDocument();
     expect(screen.getByText("SQLite Usage")).toBeInTheDocument();
+  });
+
+  it("should show error message when embedding model load fails", async () => {
+    render(<SettingsPanel open={true} onClose={mockOnClose} />);
+
+    // Click the "Load Model" button for embedding
+    const loadButtons = screen.getAllByText("Load Model");
+    const embeddingButton = loadButtons[0];
+    fireEvent.click(embeddingButton);
+
+    // After loading, should show an error indicator (not just silent "error" state)
+    await waitFor(() => {
+      const errorIndicators = screen.getAllByText(/error|failed/i);
+      expect(errorIndicators.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it("should show error message when LLM model load fails", async () => {
+    render(<SettingsPanel open={true} onClose={mockOnClose} />);
+
+    // Click the "Load Model" button for LLM
+    const loadButtons = screen.getAllByText("Load Model");
+    const llmButton = loadButtons[1];
+    fireEvent.click(llmButton);
+
+    // After loading, should show an error indicator (not just silent "error" state)
+    await waitFor(() => {
+      const errorIndicators = screen.getAllByText(/error|failed/i);
+      expect(errorIndicators.length).toBeGreaterThanOrEqual(1);
+    });
   });
 });

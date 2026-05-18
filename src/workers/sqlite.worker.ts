@@ -6,7 +6,9 @@
  * Cross-compiled from `docs/architecture/02_storage_layer_spec.md`.
  */
 
-import initSqlWasm, { Database } from "@vscode/sqlite3";
+import SQLiteESMFactory from "wa-sqlite/dist/wa-sqlite-async.mjs";
+import * as SQLite from "wa-sqlite";
+import { IDBMinimalVFS } from "wa-sqlite/src/examples/IDBMinimalVFS.js";
 import {
   NOTES_TABLE_SQL,
   EMBEDDINGS_TABLE_SQL,
@@ -14,14 +16,36 @@ import {
   INDEXES_SQL,
 } from "@/types/database";
 
-let db: Database | null = null;
+let sqlite3: SQLite.SQLiteAPI | null = null;
+let dbPtr: number = 0;
 
-async function initDb(): Promise<Database> {
-  if (db) return db;
+class WorkerIndexedDbVFS extends IDBMinimalVFS {
+  constructor() {
+    super("semanticnotes-idb");
+  }
 
-  await initSqlWasm();
-  db = new Database("semanticnotes.db");
-  return db;
+  handleAsync<T>(operation: () => Promise<T> | T): Promise<T> | T {
+    return operation();
+  }
+}
+
+async function initDb(): Promise<{ sqlite3: SQLite.SQLiteAPI; db: number }> {
+  if (sqlite3 && dbPtr) {
+    return { sqlite3, db: dbPtr };
+  }
+
+  const module = await SQLiteESMFactory();
+  sqlite3 = SQLite.Factory(module);
+
+  try {
+    const vfs = new WorkerIndexedDbVFS();
+    sqlite3.vfs_register(vfs, true);
+    dbPtr = await sqlite3.open_v2("semanticnotes.db", undefined, vfs.name);
+  } catch {
+    dbPtr = await sqlite3.open_v2("semanticnotes.db");
+  }
+
+  return { sqlite3, db: dbPtr };
 }
 
 self.onmessage = async (e: MessageEvent) => {
@@ -30,13 +54,20 @@ self.onmessage = async (e: MessageEvent) => {
   switch (type) {
     case "MOUNT": {
       try {
-        const database = await initDb();
+        const { sqlite3: api, db } = await initDb();
         // Create schema
-        database.exec(NOTES_TABLE_SQL);
-        database.exec(EMBEDDINGS_TABLE_SQL);
-        database.exec(NOTES_FTS_SQL);
+        await api.exec(db, NOTES_TABLE_SQL);
+        await api.exec(db, EMBEDDINGS_TABLE_SQL);
+        try {
+          await api.exec(db, NOTES_FTS_SQL);
+        } catch (error: any) {
+          self.postMessage({
+            type: "MOUNT_WARNING",
+            warning: { message: error?.message || "FTS5 unavailable" },
+          });
+        }
         for (const idxSql of INDEXES_SQL) {
-          database.exec(idxSql);
+          await api.exec(db, idxSql);
         }
 
         self.postMessage({ type: "MOUNTED" });
@@ -51,18 +82,17 @@ self.onmessage = async (e: MessageEvent) => {
 
     case "QUERY": {
       try {
-        const database = await initDb();
+        const { sqlite3: api, db } = await initDb();
         const { id, sql, params } = e.data;
 
-        const stmt = database.prepare(sql);
-        const results: any[] = [];
-
-        while (stmt.step()) {
-          results.push(stmt.get());
+        let results;
+        if (params && params.length > 0) {
+          results = await api.execWithParams(db, sql, params);
+        } else {
+          results = await api.execWithParams(db, sql);
         }
-        stmt.free();
 
-        self.postMessage({ type: "RESULT", id, row: results });
+        self.postMessage({ type: "RESULT", id, row: results.rows });
       } catch (error: any) {
         self.postMessage({
           type: "ERROR",
@@ -75,8 +105,8 @@ self.onmessage = async (e: MessageEvent) => {
 
     case "COMMIT": {
       try {
-        const database = await initDb();
-        database.commit();
+        const { sqlite3: api, db } = await initDb();
+        await api.run(db, "COMMIT");
         self.postMessage({ type: "COMMITTED", id: e.data.id });
       } catch (error: any) {
         self.postMessage({

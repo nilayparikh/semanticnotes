@@ -1,7 +1,7 @@
 ---
 title: "Plan 01a — Worker Runtime"
 plan_id: "01a_worker-runtime"
-status: "Complete"
+status: "Archived"
 author: "Planning Agent"
 created: "2026-05-12"
 updated: "2026-05-12"
@@ -13,8 +13,8 @@ depends_on: [00_project-setup]
 depends_on_external: []
 phase: 1
 drift_of: null
-archived_date: null
-archive_log: null
+archived_date: "2026-05-18"
+archive_log: "docs/plans/logs/2026-05-18-01a_worker-runtime.md"
 ---
 
 ## 1. Objective

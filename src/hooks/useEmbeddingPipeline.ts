@@ -1,5 +1,7 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { chunkText } from "@/utils/text-chunking";
+import type { DbServiceInterface } from "@/types/database";
+import EmbeddingWorker from "@/workers/embedding.worker?worker";
 
 export interface EmbeddingResult {
   noteId: string;
@@ -8,6 +10,7 @@ export interface EmbeddingResult {
 }
 
 interface UseEmbeddingPipelineOptions {
+  dbService?: DbServiceInterface;
   onEmbeddingComplete?: (result: EmbeddingResult) => void;
   debounceMs?: number;
 }
@@ -15,55 +18,179 @@ interface UseEmbeddingPipelineOptions {
 interface UseEmbeddingPipelineReturn {
   embedNote: (noteId: string, text: string) => void;
   isEmbedding: boolean;
+  isModelReady: boolean;
+  isModelLoading: boolean;
+  modelError: string | null;
   lastResult: EmbeddingResult | undefined;
 }
 
-const DEFAULT_DEBOUNCE_MS = 1000;
+const DEFAULT_DEBOUNCE_MS = 1500;
+const EMBEDDING_MODEL = "all-MiniLM-L6-v2";
+const EMBEDDING_DIM = 384;
 
 export function useEmbeddingPipeline(
   options: UseEmbeddingPipelineOptions = {},
 ): UseEmbeddingPipelineReturn {
-  const { onEmbeddingComplete, debounceMs = DEFAULT_DEBOUNCE_MS } = options;
+  const { dbService, onEmbeddingComplete, debounceMs = DEFAULT_DEBOUNCE_MS } = options;
 
+  const workerRef = useRef<Worker | null>(null);
+  const pendingRef = useRef<Set<string>>(new Set());
+  const chunkTextRef = useRef<Map<string, string>>(new Map());
+  const noteBatchRef = useRef<Map<string, number>>(new Map());
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isEmbeddingRef = useRef(false);
-  const lastResultRef = useRef<EmbeddingResult | undefined>(undefined);
   const currentDebounceIdRef = useRef(0);
+  const lastResultRef = useRef<EmbeddingResult | undefined>(undefined);
+
+  const [isEmbedding, setIsEmbedding] = useState(false);
+  const [isModelReady, setIsModelReady] = useState(false);
+  const [isModelLoading, setIsModelLoading] = useState(false);
+  const [modelError, setModelError] = useState<string | null>(null);
+
+  // Initialize worker and model on mount
+  useEffect(() => {
+    const worker = new EmbeddingWorker();
+    workerRef.current = worker;
+
+    const handleMessage = (e: MessageEvent) => {
+      const { type } = e.data;
+      switch (type) {
+        case "MODEL_READY":
+          setIsModelReady(true);
+          setIsModelLoading(false);
+          setModelError(null);
+          break;
+        case "MODEL_ERROR":
+          setIsModelReady(false);
+          setIsModelLoading(false);
+          setModelError(e.data.error?.message || "Model init failed");
+          break;
+        case "EMBEDDING_READY": {
+          const { id, embeddings } = e.data;
+          pendingRef.current.delete(id);
+          const [noteId, batchIdStr, chunkIndexStr] = String(id).split("::");
+          const batchId = parseInt(batchIdStr, 10);
+          const chunkIndex = parseInt(chunkIndexStr, 10);
+          const chunkText = chunkTextRef.current.get(id) ?? "";
+          chunkTextRef.current.delete(id);
+
+          if ((noteBatchRef.current.get(noteId) ?? 0) !== batchId) {
+            if (pendingRef.current.size === 0) {
+              setIsEmbedding(false);
+            }
+            break;
+          }
+
+          if (pendingRef.current.size === 0) {
+            setIsEmbedding(false);
+          }
+          // Store embedding in DB
+          if (dbService) {
+            const embeddingBytes = new Uint8Array(embeddings.buffer);
+            dbService.query(
+              `INSERT OR REPLACE INTO note_embeddings
+               (note_id, chunk_index, chunk_text, embedding, model_version, dim, updated_at, updated_ts)
+               VALUES (?, ?, ?, ?, ?, ?, datetime('now'), strftime('%s', 'now'))`,
+              [noteId, chunkIndex, chunkText, embeddingBytes, EMBEDDING_MODEL, EMBEDDING_DIM],
+            ).catch((err) => {
+              console.warn("useEmbeddingPipeline: failed to store embedding", err);
+            });
+          }
+          break;
+        }
+        case "EMBEDDING_ERROR": {
+          const { id } = e.data;
+          pendingRef.current.delete(id);
+          chunkTextRef.current.delete(id);
+          if (pendingRef.current.size === 0) {
+            setIsEmbedding(false);
+          }
+          console.warn("useEmbeddingPipeline: embedding error", e.data.error);
+          break;
+        }
+      }
+    };
+
+    worker.addEventListener("message", handleMessage);
+
+    // Init model
+    setIsModelLoading(true);
+    worker.postMessage({
+      type: "INIT_MODEL",
+      model: EMBEDDING_MODEL,
+      dtype: "float16",
+      device: "webgpu",
+    });
+
+    return () => {
+      worker.removeEventListener("message", handleMessage);
+      worker.terminate();
+      workerRef.current = null;
+    };
+  }, [dbService]);
 
   const embedNote = useCallback(
     (noteId: string, text: string) => {
+      if (!workerRef.current || !isModelReady) return;
+
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
 
       const debounceId = ++currentDebounceIdRef.current;
-      isEmbeddingRef.current = true;
 
       debounceRef.current = setTimeout(() => {
-        // Stale debounce check
-        if (debounceId !== currentDebounceIdRef.current) {
-          isEmbeddingRef.current = false;
-          return;
-        }
+        if (debounceId !== currentDebounceIdRef.current) return;
 
         const chunks = chunkText(text);
-        const result: EmbeddingResult = {
-          noteId,
-          chunks: chunks.length,
-          modelVersion: "all-MiniLM-L6-v2",
-        };
+        const nextBatchId = (noteBatchRef.current.get(noteId) ?? 0) + 1;
+        noteBatchRef.current.set(noteId, nextBatchId);
 
-        lastResultRef.current = result;
-        isEmbeddingRef.current = false;
-        onEmbeddingComplete?.(result);
+        void (async () => {
+          if (dbService) {
+            try {
+              await dbService.query("DELETE FROM note_embeddings WHERE note_id = ?", [noteId]);
+            } catch (err) {
+              console.warn("useEmbeddingPipeline: failed to clear stale embeddings", err);
+            }
+          }
+
+          if (chunks.length === 0) {
+            setIsEmbedding(false);
+            return;
+          }
+
+          setIsEmbedding(true);
+
+          for (const chunk of chunks) {
+            const id = `${noteId}::${nextBatchId}::${chunk.index}`;
+            pendingRef.current.add(id);
+            chunkTextRef.current.set(id, chunk.text);
+            workerRef.current!.postMessage({
+              type: "EMBED",
+              id,
+              text: chunk.text,
+            });
+          }
+
+          const result: EmbeddingResult = {
+            noteId,
+            chunks: chunks.length,
+            modelVersion: EMBEDDING_MODEL,
+          };
+          lastResultRef.current = result;
+          onEmbeddingComplete?.(result);
+        })();
       }, debounceMs);
     },
-    [debounceMs, onEmbeddingComplete],
+    [dbService, debounceMs, isModelReady, onEmbeddingComplete],
   );
 
   return {
     embedNote,
-    isEmbedding: isEmbeddingRef.current,
+    isEmbedding,
+    isModelReady,
+    isModelLoading,
+    modelError,
     lastResult: lastResultRef.current,
   };
 }

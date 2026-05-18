@@ -83,10 +83,14 @@ export const EMBEDDINGS_TABLE_SQL = `CREATE TABLE IF NOT EXISTS note_embeddings 
   UNIQUE(note_id, chunk_index)
 )`;
 
-export const NOTES_FTS_SQL = `CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(title, content, content='notes')`;
+export const NOTES_FTS_SQL = `CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(
+  note_id UNINDEXED,
+  title,
+  content
+)`;
 
 export const INDEXES_SQL = [
-  `CREATE INDEX idx_notes_updated_at ON notes(updated_at DESC)`,
-  `CREATE INDEX idx_embeddings_note_id ON note_embeddings(note_id)`,
-  `CREATE INDEX idx_embeddings_model ON note_embeddings(model_version)`,
+  `CREATE INDEX IF NOT EXISTS idx_notes_updated_at ON notes(updated_at DESC)`,
+  `CREATE INDEX IF NOT EXISTS idx_embeddings_note_id ON note_embeddings(note_id)`,
+  `CREATE INDEX IF NOT EXISTS idx_embeddings_model ON note_embeddings(model_version)`,
 ];

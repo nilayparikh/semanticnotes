@@ -1,7 +1,7 @@
 ---
 title: "Plan 00 — Project Setup"
 plan_id: "00_project-setup"
-status: "Complete"
+status: "Archived"
 author: "Planning Agent"
 created: "2026-05-12"
 updated: "2026-05-12"
@@ -13,8 +13,8 @@ depends_on: []
 depends_on_external: []
 phase: 0
 drift_of: null
-archived_date: null
-archive_log: null
+archived_date: "2026-05-18"
+archive_log: "docs/plans/logs/2026-05-18-00_project-setup.md"
 ---
 
 ## 1. Objective

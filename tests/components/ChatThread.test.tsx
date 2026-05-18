@@ -37,12 +37,16 @@ describe("ChatThread", () => {
 
   it("should display user messages with user styling", () => {
     render(<ChatThread messages={[makeMsg("user", "User message")]} />);
-    expect(screen.getByText("User message").parentElement?.parentElement).toHaveClass("justify-end");
+    const msgEl = screen.getByText("User message").parentElement?.children[0];
+    expect(msgEl).toHaveClass("bg-primary-fixed-dim/10");
+    expect(msgEl).toHaveClass("text-on-surface");
   });
 
   it("should display assistant messages with assistant styling", () => {
     render(<ChatThread messages={[makeMsg("assistant", "Assistant message")]} />);
-    expect(screen.getByText("Assistant message").parentElement?.parentElement).toHaveClass("justify-start");
+    const msgEl = screen.getByText("Assistant message").parentElement?.children[0];
+    expect(msgEl).toHaveClass("bg-surface-container-high");
+    expect(msgEl).toHaveClass("text-on-surface-variant");
   });
 
   it("should display streaming tokens with pulsing cursor", () => {

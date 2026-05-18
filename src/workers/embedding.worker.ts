@@ -15,12 +15,31 @@ self.onmessage = async (e: MessageEvent) => {
 
   switch (type) {
     case "INIT_MODEL": {
-      try {
-        embedder = await pipeline("feature-extraction", e.data.model, {
+      const attempts = [
+        {
           dtype: e.data.dtype || "float16",
           device: e.data.device || "webgpu",
-        });
-        self.postMessage({ type: "MODEL_READY" });
+        },
+        {
+          device: "wasm",
+        },
+        {},
+      ];
+
+      try {
+        let lastError: unknown = null;
+
+        for (const options of attempts) {
+          try {
+            embedder = await pipeline("feature-extraction", e.data.model, options);
+            self.postMessage({ type: "MODEL_READY", device: options.device || "auto" });
+            return;
+          } catch (error: any) {
+            lastError = error;
+          }
+        }
+
+        throw lastError ?? new Error("Model init failed");
       } catch (error: any) {
         self.postMessage({
           type: "MODEL_ERROR",
@@ -39,13 +58,11 @@ self.onmessage = async (e: MessageEvent) => {
         const { id, text } = e.data;
         const output = await embedder(text, { pooling: "mean", normalize: true });
 
-        // Extract Float32Array from output
-        const embeddings: Float32Array = new Float32Array(
-          output.data.shape[1],
-        );
-        for (let i = 0; i < output.data.shape[1]; i++) {
-          embeddings[i] = output.data[0][i];
-        }
+        // Transformers.js v3: output.data is a TypedArray (Float32Array)
+        // Shape is typically [1, 384] for single input with mean pooling
+        const embeddings: Float32Array = output.data instanceof Float32Array
+          ? output.data
+          : new Float32Array(output.data);
 
         self.postMessage(
           { type: "EMBEDDING_READY", id, embeddings },

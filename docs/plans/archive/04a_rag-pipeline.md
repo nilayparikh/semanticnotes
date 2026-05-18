@@ -1,7 +1,7 @@
 ---
 title: "Plan 04a — RAG Pipeline"
 plan_id: "04a_rag-pipeline"
-status: "Complete"
+status: "Archived"
 author: "Planning Agent"
 created: "2026-05-12"
 updated: "2026-05-17"
@@ -13,8 +13,8 @@ depends_on: [03b_semantic-search]
 depends_on_external: []
 phase: 4
 drift_of: null
-archived_date: null
-archive_log: null
+archived_date: "2026-05-18"
+archive_log: "docs/plans/logs/2026-05-18-04a_rag-pipeline.md"
 ---
 
 ## 1. Objective

@@ -1,30 +1,91 @@
 import { Note } from "@/types/note";
 import { MarkdownPreview } from "@/components/MarkdownPreview";
+import { useRef, useState, useEffect, useCallback } from "react";
 
 interface NoteEditorProps {
   note: Note;
   onUpdate: (data: { title?: string; content?: string }) => void;
 }
 
+const DEBOUNCE_MS = 1000;
+type SaveStatus = "Saved" | "Unsaved" | "Saving...";
+
 export default function NoteEditor({ note, onUpdate }: NoteEditorProps) {
+  const timersRef = useRef<number[]>([]);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>("Saved");
+
+  // Clear timers on unmount
+  useEffect(() => {
+    return () => {
+      timersRef.current.forEach(clearTimeout);
+    };
+  }, []);
+
+  // Reset save status when note changes externally
+  useEffect(() => {
+    setSaveStatus("Saved");
+  }, [note.id]);
+
+  const scheduleUpdate = useCallback(
+    (update: { title?: string; content?: string }) => {
+      // Clear existing timers
+      timersRef.current.forEach(clearTimeout);
+      timersRef.current = [];
+
+      // Show Unsaved immediately
+      setSaveStatus("Unsaved");
+
+      // Show Saving... after 500ms
+      const savingTimer = window.setTimeout(() => {
+        setSaveStatus("Saving...");
+      }, 500);
+      timersRef.current.push(savingTimer);
+
+      // Call onUpdate after 1000ms debounce, then show Saved
+      const updateTimer = window.setTimeout(() => {
+        onUpdate(update);
+        setSaveStatus("Saved");
+      }, DEBOUNCE_MS);
+      timersRef.current.push(updateTimer);
+    },
+    [onUpdate]
+  );
+
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onUpdate({ title: e.target.value });
+    const newTitle = e.target.value;
+    if (newTitle !== note.title) {
+      scheduleUpdate({ title: newTitle });
+    }
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onUpdate({ content: e.target.value });
+    const newContent = e.target.value;
+    if (newContent !== note.content) {
+      scheduleUpdate({ content: newContent });
+    }
   };
 
   return (
     <div className="flex flex-col h-full" data-testid="note-editor">
       {/* Title Bar */}
       <div className="px-8 py-4 flex items-center justify-between border-b border-white/5">
-        <div className="font-headline-md text-headline-md text-on-surface font-bold">
-          {note.title || "Untitled"}
-        </div>
+        <input
+          type="text"
+          className="font-headline-md text-headline-md text-on-surface font-bold bg-transparent border-0 focus:ring-0 w-full"
+          value={note.title}
+          placeholder="Untitled"
+          onChange={handleTitleChange}
+          data-testid="note-title-input"
+        />
         <div className="flex gap-2">
           <span className="px-2 py-1 rounded border border-white/10 text-on-surface-variant font-status-pill text-status-pill">
             Markdown
+          </span>
+          <span
+            className="px-2 py-1 rounded text-on-surface-variant font-status-pill text-status-pill"
+            data-testid="save-status"
+          >
+            {saveStatus}
           </span>
         </div>
       </div>

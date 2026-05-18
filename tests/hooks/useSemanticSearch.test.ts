@@ -34,6 +34,8 @@ function makeEmbedding(values: number[]): Float32Array {
 describe("useSemanticSearch", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    (searchVectors as any).mockReset();
+    (searchNotesFts5 as any).mockReset().mockResolvedValue([]);
   });
 
   it("should initialize with empty results and not searching", () => {
@@ -143,6 +145,37 @@ describe("useSemanticSearch", () => {
     });
 
     expect(result.current.results).toHaveLength(10);
+  });
+
+  it("should keep the best semantic score when multiple chunks map to the same note", async () => {
+    const mockDb = createMockDbService([
+      {
+        note_id: 1,
+        chunk_index: 0,
+        embedding: makeEmbedding([0.1, 0.2, 0.3]),
+      },
+      {
+        note_id: 1,
+        chunk_index: 1,
+        embedding: makeEmbedding([0.3, 0.2, 0.1]),
+      },
+    ]);
+
+    (searchVectors as any).mockReturnValue([
+      { noteId: 1, score: 0.92, chunkIndex: 0 },
+      { noteId: 1, score: 0.41, chunkIndex: 1 },
+    ]);
+
+    const { result } = renderHook(() => useSemanticSearch(mockDb, 50));
+
+    await act(async () => {
+      await result.current.search("test");
+    });
+
+    expect(result.current.results).toHaveLength(1);
+    expect(result.current.results[0].noteId).toBe("1");
+    expect(result.current.results[0].score).toBe(0.92);
+    expect(result.current.results[0].percentage).toBe(92);
   });
 
   it("should set isSearching to true during search then false on complete", async () => {

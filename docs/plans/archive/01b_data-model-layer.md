@@ -1,7 +1,7 @@
 ---
 title: "Plan 01b — Data & Model Layer"
 plan_id: "01b_data-model-layer"
-status: "Complete"
+status: "Archived"
 author: "Planning Agent"
 created: "2026-05-12"
 updated: "2026-05-12"
@@ -13,8 +13,8 @@ depends_on: [01a_worker-runtime]
 depends_on_external: []
 phase: 1
 drift_of: null
-archived_date: null
-archive_log: null
+archived_date: "2026-05-18"
+archive_log: "docs/plans/logs/2026-05-18-01b_data-model-layer.md"
 ---
 
 > **Completion Note**: All 5 acceptance criteria implemented and verified with 30 passing tests. Full test suite (193 tests) passes with no regressions.

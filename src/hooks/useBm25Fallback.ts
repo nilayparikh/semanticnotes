@@ -12,7 +12,7 @@ import type { DbServiceInterface } from "@/types/database";
 // ── Types ────────────────────────────────────────────────────────────────
 
 export interface Bm25Result {
-  noteId: number;
+  noteId: string;
   title: string;
   score: number;
 }
@@ -25,10 +25,9 @@ export interface Bm25Result {
  */
 export function createFts5Table(): string {
   return `CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(
+    note_id UNINDEXED,
     title,
-    content,
-    content = 'notes',
-    content_rowid = 'id'
+    content
   )`;
 }
 
@@ -46,7 +45,11 @@ export async function searchNotesFts5(
   query: string
 ): Promise<Bm25Result[]> {
   const rows = await dbService.query(
-    `SELECT rowid AS id, title, rank FROM notes_fts WHERE notes_fts MATCH ? ORDER BY rank LIMIT 50`,
+    `SELECT note_id, title, bm25(notes_fts) AS rank
+     FROM notes_fts
+     WHERE notes_fts MATCH ?
+     ORDER BY rank
+     LIMIT 50`,
     [query]
   );
 
@@ -55,7 +58,7 @@ export async function searchNotesFts5(
   }
 
   return rows.map((row: any) => ({
-    noteId: row.id,
+    noteId: String(row.note_id),
     title: row.title,
     score: row.rank ?? 0,
   }));

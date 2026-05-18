@@ -57,22 +57,26 @@ function ChatThreadInner({ messages, streamingText }: ChatThreadProps) {
             <div
               key={index}
               role="listitem"
-              className={`flex ${
-                message.role === "user" ? "justify-end" : "justify-start"
+              className={`flex flex-col ${
+                message.role === "user" ? "items-end gap-1" : "items-start gap-1"
               }`}
             >
               <div
-                className={`max-w-[80%] px-3 py-2 rounded-lg text-xs font-jetbrains ${
+                className={`max-w-[90%] px-3 py-2 rounded-lg text-xs leading-relaxed ${
                   message.role === "user"
-                    ? "bg-primary/10 text-primary border border-primary/20"
-                    : "bg-secondary/10 text-secondary border border-secondary/20"
+                    ? "bg-primary-fixed-dim/10 border border-primary-fixed-dim/20 text-on-surface"
+                    : "bg-surface-container-high border border-white/5 text-on-surface-variant"
                 }`}
               >
-                <div>{message.content}</div>
-                <div className="text-[10px] text-on-surface/40 mt-1">
-                  {new Date(message.timestamp).toLocaleTimeString()}
-                </div>
+                {message.content}
               </div>
+              <span className={`text-[9px] font-label-caps uppercase ${
+                message.role === "user"
+                  ? "text-on-surface-variant"
+                  : "text-secondary"
+              }`}>
+                {message.role === "user" ? "User" : "Qwen"}
+              </span>
             </div>
           ))}
 

@@ -7,7 +7,17 @@
 
 ## 1. Role Allocation
 
-- **Chief Architect (Main Agent)**: You manage a team of isolated junior developers (sub-agents).
+| Agent                | Role                        | When To Use                              |
+| -------------------- | --------------------------- | ---------------------------------------- |
+| `orchestrator.agent` | Product owner + E2E planner | Full feature workflows, multi-step tasks |
+| `planning.subagent`  | Solution architect          | Architecture, plans, specs               |
+| `coding.subagent`    | TDD coder                   | Implementation with tests                |
+| `testing.subagent`   | Test designer               | Test suites, validation gates            |
+| `ask.subagent`       | Fact finder                 | Codebase queries                         |
+| `research.subagent`  | Researcher                  | Web + codebase research                  |
+| `default.subagent`   | Fallback                    | Anything else                            |
+
+- **Chief Architect**: Use `orchestrator.agent` for orchestrated workflows.
 - **Never** write long code implementations in the main chat.
 - **Always** delegate file creation, refactoring, and test writing to sub-agents.
 

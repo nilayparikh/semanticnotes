@@ -27,23 +27,28 @@ export function ChatInput({ onSend }: ChatInputProps) {
   };
 
   return (
-    <div className="glass-panel ai-glow px-4 py-3 rounded-lg flex items-end gap-3">
-      <textarea
+    <div className="relative flex items-center">
+      <input
+        type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={handleKeyDown}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            handleSend();
+          }
+        }}
         placeholder="Ask anything about your notes..."
         aria-label="Chat message input"
-        rows={1}
-        className="flex-1 bg-transparent border-none focus:outline-none text-sm text-on-surface resize-none"
+        className="w-full bg-surface-container border-0 rounded-lg pl-3 pr-10 py-2 text-[12px] placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary-fixed-dim focus:outline-none"
       />
       <button
         onClick={handleSend}
         disabled={!query.trim()}
         aria-label="Send"
-        className="px-3 py-1 text-sm text-primary bg-primary/10 rounded-md hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="absolute right-2 text-primary-fixed-dim hover:text-primary-fixed transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >
-        Send
+        <span className="material-symbols-outlined text-[20px]">send</span>
       </button>
     </div>
   );

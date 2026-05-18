@@ -22,7 +22,7 @@ export function cosineSimilarity(a: Float32Array, b: Float32Array): number {
 }
 
 export interface SearchResult {
-  noteId: number;
+  noteId: string;
   score: number;
   chunkIndex: number;
 }
@@ -34,7 +34,7 @@ export interface SearchResult {
 export function searchVectors(
   query: Float32Array,
   vectors: Array<{
-    noteId: number;
+    noteId: string;
     chunkIndex: number;
     embedding: Float32Array;
   }>,

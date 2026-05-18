@@ -3,49 +3,19 @@ import { useNoteManager } from "@/hooks/useNoteManager";
 import { useSemanticSearch, SemanticSearchResult } from "@/hooks/useSemanticSearch";
 import { useEmbeddingPipeline } from "@/hooks/useEmbeddingPipeline";
 import { useTheme } from "@/hooks/useTheme";
+import { useLoadingState } from "@/hooks/useLoadingState";
+import { DbService } from "@/hooks/useDbService";
 import { GlobalHeader } from "@/components/GlobalHeader";
+import { LoadingOverlay } from "@/components/LoadingOverlay";
 import { Sidebar } from "@/components/Sidebar";
 import NoteEditor from "@/components/NoteEditor";
 import { SearchResults } from "@/components/SearchResults";
 import { SemanticContextPanel } from "@/components/SemanticContextPanel";
 import { AIContextBar } from "@/components/AIContextBar";
 import { SettingsPanel } from "@/components/SettingsPanel";
+import { EmptyState } from "@/components/EmptyState";
 import type { Note } from "@/types/note";
-
-/* ------------------------------------------------------------------ */
-/*  In-memory DB service mock                                          */
-/* ------------------------------------------------------------------ */
-
-interface DbServiceInterface {
-  initialize(): Promise<void>;
-  query: (sql: string, params?: any[]) => Promise<any>;
-  ready: Promise<void>;
-}
-
-class InMemoryDbService implements DbServiceInterface {
-  private data: Map<string, any[]> = new Map();
-  private resolveReady: () => void = () => {};
-  ready = new Promise<void>((resolve) => { this.resolveReady = resolve; });
-
-  constructor() {
-    // Simulate async init
-    setTimeout(() => this.resolveReady(), 0);
-  }
-
-  initialize(): Promise<void> {
-    return this.ready;
-  }
-
-  async query(sql: string, _params: any[] = []): Promise<any> {
-    await this.ready;
-    const key = sql.split("FROM")[1]?.trim().split(/\s/)[0];
-    return this.data.get(key) || [];
-  }
-
-  setTable(name: string, rows: any[]) {
-    this.data.set(name, rows);
-  }
-}
+import SqliteWorker from "@/workers/sqlite.worker?worker";
 
 /* ------------------------------------------------------------------ */
 /*  WebGPU Detection                                                   */
@@ -123,10 +93,45 @@ function findRelatedNotes(currentNote: Note, allNotes: Note[]): Array<{ id: stri
 /* ------------------------------------------------------------------ */
 
 export default function App() {
-  const { notes, selectedNote, createNote, updateNote, selectNote } = useNoteManager();
+  const sqliteWorker = useMemo(() => new SqliteWorker(), []);
+  const dbService = useRef(new DbService(sqliteWorker));
+  const [isSqliteReady, setIsSqliteReady] = useState(false);
+
+  // Loading state orchestration
+  const { state, startComponent, readyComponent, errorComponent, hasError } = useLoadingState();
+
+  // Initialize DB service and mark components
+  useEffect(() => {
+    // WebGPU detection is instant
+    startComponent("webgpu");
+    readyComponent("webgpu");
+
+    startComponent("sqlite");
+    dbService.current.initialize();
+    dbService.current.ready
+      .then(() => {
+        setIsSqliteReady(true);
+        readyComponent("sqlite");
+      })
+      .catch((error) => {
+        setIsSqliteReady(false);
+        errorComponent("sqlite", error instanceof Error ? error.message : "SQLite init failed");
+      });
+
+    startComponent("llmWorker");
+    readyComponent("llmWorker");
+  }, [errorComponent, readyComponent, startComponent]);
+
+  // Cleanup worker on unmount
+  useEffect(() => {
+    return () => {
+      sqliteWorker.terminate();
+    };
+  }, [sqliteWorker]);
+
+  const { notes, selectedNote, createNote, updateNote, selectNote } = useNoteManager(dbService.current);
   const { theme, isDark } = useTheme();
   const webGpuScore = useMemo(() => detectWebGpu(), []);
-  const dbService = useRef(new InMemoryDbService());
 
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
@@ -134,19 +139,55 @@ export default function App() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<Array<{ noteId: string; title: string; percentage: number }>>([]);
 
-  // Semantic search hook (uses DB, but we also do keyword fallback)
-  const { results: semanticResults } = useSemanticSearch(dbService.current, webGpuScore);
+  // Semantic search hook (uses DB with BM25 fallback)
+  const semanticSearch = useSemanticSearch(dbService.current, webGpuScore);
 
   // Embedding pipeline
-  const { embedNote, isEmbedding } = useEmbeddingPipeline({
+  const {
+    embedNote,
+    isEmbedding,
+    isModelReady,
+    isModelLoading,
+    modelError,
+    lastResult,
+  } = useEmbeddingPipeline({
+    dbService: dbService.current,
     debounceMs: 1500,
   });
+
+  useEffect(() => {
+    if (modelError) {
+      errorComponent("embeddingWorker", modelError);
+      return;
+    }
+
+    if (isModelReady) {
+      readyComponent("embeddingWorker");
+      return;
+    }
+
+    if (isModelLoading) {
+      startComponent("embeddingWorker");
+    }
+  }, [errorComponent, isModelLoading, isModelReady, modelError, readyComponent, startComponent]);
 
   // Settings panel
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  // Model loaded state
-  const [modelLoaded, setModelLoaded] = useState(false);
+  // Model loaded state — driven by embedding pipeline
+  const modelLoaded = isModelReady;
+  const modelStatus = modelError
+    ? "Error"
+    : isModelReady
+      ? "Ready"
+      : isModelLoading
+        ? "Loading"
+        : "Idle";
+  const sqliteStatus = state.sqlite === "error"
+    ? "Error"
+    : isSqliteReady
+      ? "Ready"
+      : "Loading";
 
   // AI Context bar state
   const [aiProcessing, setAiProcessing] = useState(false);
@@ -159,21 +200,36 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Execute search when debounced query changes
+  // Execute semantic search when debounced query changes
   useEffect(() => {
     if (!debouncedQuery.trim()) {
       setSearchResults([]);
       setIsSearching(false);
       return;
     }
-    setIsSearching(true);
-    const timer = setTimeout(() => {
-      const results = keywordSearch(debouncedQuery, notes);
-      setSearchResults(results);
-      setIsSearching(false);
-    }, 150);
-    return () => clearTimeout(timer);
-  }, [debouncedQuery, notes]);
+    (async () => {
+      setIsSearching(true);
+      try {
+        const semanticHits = await semanticSearch.search(debouncedQuery);
+        // Map semantic results to the display format
+        const mappedResults = semanticHits
+          .map((hit) => {
+            const note = notes.find((n) => n.id === hit.noteId);
+            return {
+              noteId: hit.noteId,
+              title: note?.title || "Untitled",
+              percentage: hit.percentage,
+            };
+          })
+          .filter((r) => r.percentage > 0);
+        setSearchResults(mappedResults);
+      } catch {
+        setSearchResults([]);
+      } finally {
+        setIsSearching(false);
+      }
+    })();
+  }, [debouncedQuery, notes, semanticSearch]);
 
   // Embed note content on change (debounced via hook)
   useEffect(() => {
@@ -213,7 +269,7 @@ export default function App() {
   }, []);
 
   const handleLoadModel = useCallback(() => {
-    setModelLoaded(true);
+    // Model loading is now automatic via embedding pipeline; this is a no-op
   }, []);
 
   const handleSummarize = useCallback(() => {
@@ -234,21 +290,51 @@ export default function App() {
 
   const relatedNotes = useMemo(() => {
     if (!selectedNote) return [];
-    return findRelatedNotes(selectedNote, notes);
+    return findRelatedNotes(selectedNote, notes).map(r => ({
+      ...r,
+      content: notes.find(n => n.id === r.id)?.content || ""
+    }));
   }, [selectedNote, notes]);
+
+  const noteIndexStatus = useMemo(() => {
+    if (!selectedNote) return "Idle";
+    if (isEmbedding) return "Indexing";
+    if (lastResult?.noteId === selectedNote.id) return "Indexed";
+    if (modelError) return "Error";
+    return "Pending";
+  }, [isEmbedding, lastResult?.noteId, modelError, selectedNote]);
+
+  // Progress: percentage of components that are "ready" out of 4 total
+  const progress = useMemo(
+    () => Math.round((Object.values(state).filter((s) => s === "ready").length / 4) * 100),
+    [state],
+  );
 
   return (
     <div className="h-screen bg-background flex flex-col" data-testid="app-root">
+      {/* Loading Overlay */}
+      <LoadingOverlay
+        visible={!isSqliteReady}
+        progress={progress}
+        message={hasError ? "Initialization error — some features may be limited" : "Initializing SemanticNotes..."}
+      />
+
       {/* Global Header */}
       <GlobalHeader
         webgpuActive={webGpuScore >= 50}
-        sqliteConnected
+        sqliteConnected={isSqliteReady}
         sqliteSize="24MB"
+        sqliteStatus={sqliteStatus}
         modelLoaded={modelLoaded}
+        modelStatus={modelStatus}
         onSettingsClick={handleSettingsClick}
         onHelpClick={handleHelpClick}
         onloadModel={handleLoadModel}
       />
+
+      <div className="sr-only" aria-live="polite">
+        <span data-testid="note-index-status">{noteIndexStatus}</span>
+      </div>
 
       {/* Main 3-Column Layout */}
       <div className="flex-1 flex overflow-hidden">
@@ -270,41 +356,16 @@ export default function App() {
             <>
               <NoteEditor note={selectedNote} onUpdate={handleUpdateNote} />
               {/* Floating AI Context Bar */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-3/4 max-w-xl glass-panel rounded-full px-6 py-3 flex items-center justify-between ai-glow">
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-primary-fixed-dim animate-pulse">
-                    auto_awesome
-                  </span>
-                  <span className="text-on-surface-variant text-sm">
-                    {isEmbedding ? "Embedding in progress..." : "AI is analyzing context..."}
-                  </span>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={handleSummarize}
-                    className="text-xs px-3 py-1 rounded-full border border-white/20 hover:bg-white/10 transition-colors"
-                    data-testid="summarize-button"
-                    aria-label="Summarize note"
-                  >
-                    Summarize
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleFindLinks}
-                    className="text-xs px-3 py-1 rounded-full border border-white/20 hover:bg-white/10 transition-colors"
-                    data-testid="find-links-button"
-                    aria-label="Find semantic links"
-                  >
-                    Find Links
-                  </button>
-                </div>
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-3/4 max-w-xl">
+                <AIContextBar
+                  isProcessing={isEmbedding || aiProcessing}
+                  onSummarize={handleSummarize}
+                  onFinishLinks={handleFindLinks}
+                />
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-center h-full text-on-surface-variant font-geist">
-              Select or create a note to begin
-            </div>
+            <EmptyState onNewNote={handleNewNote} />
           )}
         </main>
 

@@ -1,5 +1,7 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTheme, ThemeMode } from "@/hooks/useTheme";
+import { ModelManager } from "@/hooks/useModelManager";
+import { ModelState } from "@/types/models";
 
 interface SettingsPanelProps {
   open: boolean;
@@ -20,11 +22,50 @@ const THEME_OPTIONS: { value: ThemeMode; label: string }[] = [
 
 /**
  * Settings panel modal with glass-panel styling.
- * Renders theme, model selection, storage usage, and WebGPU status sections.
+ * Renders theme, model selection, storage usage, WebGPU status, and model management sections.
  */
 export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
   const { theme, setTheme } = useTheme();
   const panelRef = useRef<HTMLDivElement>(null);
+  const modelManager = useMemo(() => new ModelManager(), []);
+  const [embeddingState, setEmbeddingState] = useState<ModelState>("idle");
+  const [llmState, setLlmState] = useState<ModelState>("idle");
+  const [embeddingError, setEmbeddingError] = useState<string | null>(null);
+  const [llmError, setLlmError] = useState<string | null>(null);
+
+  const handleLoadEmbedding = useCallback(async () => {
+    setEmbeddingState("loading");
+    setEmbeddingError(null);
+    try {
+      await modelManager.loadEmbeddingModel();
+      setEmbeddingState("ready");
+    } catch (error) {
+      setEmbeddingState("error");
+      setEmbeddingError(
+        error instanceof Error ? error.message : "Failed to load embedding model",
+      );
+    }
+  }, [modelManager]);
+
+  const handleLoadLLM = useCallback(async () => {
+    setLlmState("loading");
+    setLlmError(null);
+    try {
+      await modelManager.loadLLM();
+      setLlmState("ready");
+    } catch (error) {
+      setLlmState("error");
+      setLlmError(
+        error instanceof Error ? error.message : "Failed to load LLM model",
+      );
+    }
+  }, [modelManager]);
+
+  const handleUnloadAll = useCallback(async () => {
+    await modelManager.disposeAll();
+    setEmbeddingState("disposed");
+    setLlmState("disposed");
+  }, [modelManager]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -147,7 +188,7 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
         </div>
 
         {/* WebGPU Status Section */}
-        <div className="mb-2">
+        <div className="mb-6">
           <div className="flex items-center gap-2 text-on-surface-variant font-label-caps text-label-caps uppercase tracking-widest mb-3">
             <span className="material-symbols-outlined text-[16px]">memory</span>
             WebGPU
@@ -156,6 +197,95 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
             <div className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
             <span className="text-secondary text-sm font-medium">Active</span>
           </div>
+        </div>
+
+        {/* Model Management Section */}
+        <div>
+          <div className="flex items-center gap-2 text-on-surface-variant font-label-caps text-label-caps uppercase tracking-widest mb-3">
+            <span className="material-symbols-outlined text-[16px]">smart_toy</span>
+            Model Management
+          </div>
+
+          {/* Embedding Model */}
+          <div className="bg-surface-container-highest/50 border border-white/10 rounded-lg px-4 py-3 mb-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-on-surface text-sm">Embedding Model</span>
+              <span
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                  embeddingState === "idle"
+                    ? "bg-gray-500/20 text-gray-300"
+                    : embeddingState === "loading"
+                    ? "bg-cyan-500/20 text-cyan-300 animate-pulse"
+                    : embeddingState === "ready"
+                    ? "bg-green-500/20 text-green-300"
+                    : embeddingState === "error"
+                    ? "bg-red-500/20 text-red-300"
+                    : "bg-amber-500/20 text-amber-300"
+                }`}
+              >
+                {embeddingState}
+              </span>
+            </div>
+            {embeddingError && (
+              <p className="text-red-400 text-xs mb-2" data-testid="embedding-error">
+                {embeddingError}
+              </p>
+            )}
+            <button
+              type="button"
+              onClick={handleLoadEmbedding}
+              disabled={embeddingState === "loading" || embeddingState === "ready"}
+              className="w-full px-3 py-1.5 rounded-lg border border-white/10 bg-primary-fixed-dim/10 text-primary-fixed-dim text-sm font-medium hover:bg-primary-fixed-dim/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {embeddingState === "loading" ? "Loading..." : "Load Model"}
+            </button>
+          </div>
+
+          {/* LLM Model */}
+          <div className="bg-surface-container-highest/50 border border-white/10 rounded-lg px-4 py-3 mb-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-on-surface text-sm">LLM Model</span>
+              <span
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                  llmState === "idle"
+                    ? "bg-gray-500/20 text-gray-300"
+                    : llmState === "loading"
+                    ? "bg-cyan-500/20 text-cyan-300 animate-pulse"
+                    : llmState === "ready"
+                    ? "bg-green-500/20 text-green-300"
+                    : llmState === "error"
+                    ? "bg-red-500/20 text-red-300"
+                    : "bg-amber-500/20 text-amber-300"
+                }`}
+              >
+                {llmState}
+              </span>
+            </div>
+            {llmError && (
+              <p className="text-red-400 text-xs mb-2" data-testid="llm-error">
+                {llmError}
+              </p>
+            )}
+            <button
+              type="button"
+              onClick={handleLoadLLM}
+              disabled={llmState === "loading" || llmState === "ready"}
+              className="w-full px-3 py-1.5 rounded-lg border border-white/10 bg-primary-fixed-dim/10 text-primary-fixed-dim text-sm font-medium hover:bg-primary-fixed-dim/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {llmState === "loading" ? "Loading..." : "Load Model"}
+            </button>
+          </div>
+
+          {/* Unload All */}
+          {(embeddingState === "ready" || llmState === "ready") && (
+            <button
+              type="button"
+              onClick={handleUnloadAll}
+              className="w-full px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-on-surface-variant text-sm font-medium hover:bg-white/10 transition-colors"
+            >
+              Unload All Models
+            </button>
+          )}
         </div>
       </div>
     </div>

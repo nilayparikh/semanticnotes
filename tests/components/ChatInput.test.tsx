@@ -9,50 +9,50 @@ describe("ChatInput", () => {
     onSendMock = vi.fn();
   });
 
-  it("should render textarea with placeholder text", () => {
+  it("should render input with placeholder text", () => {
     render(<ChatInput onSend={onSendMock} />);
 
-    const textarea = screen.getByPlaceholderText(
+    const input = screen.getByPlaceholderText(
       "Ask anything about your notes..."
     );
-    expect(textarea).toBeDefined();
+    expect(input).toBeDefined();
   });
 
   it("should render send button", () => {
     render(<ChatInput onSend={onSendMock} />);
 
-    const button = screen.getByRole("button", { name: "Send" });
+    const button = screen.getByLabelText("Send");
     expect(button).toBeDefined();
   });
 
   it("should have send button disabled when input is empty", () => {
     render(<ChatInput onSend={onSendMock} />);
 
-    const button = screen.getByRole("button", { name: "Send" });
+    const button = screen.getByLabelText("Send");
     expect(button).toBeDisabled();
   });
 
   it("should enable send button when input has text", () => {
     render(<ChatInput onSend={onSendMock} />);
 
-    const textarea = screen.getByPlaceholderText(
+    const input = screen.getByPlaceholderText(
       "Ask anything about your notes..."
     );
-    fireEvent.change(textarea, { target: { value: "hello" } });
+    fireEvent.change(input, { target: { value: "hello" } });
 
-    const button = screen.getByRole("button", { name: "Send" });
+    const button = screen.getByLabelText("Send");
     expect(button).not.toBeDisabled();
   });
 
   it("should emit onSend with query string when button is clicked", () => {
     render(<ChatInput onSend={onSendMock} />);
 
-    const textarea = screen.getByPlaceholderText(
+    const input = screen.getByPlaceholderText(
       "Ask anything about your notes..."
     );
-    fireEvent.change(textarea, { target: { value: "what is TDD?" } });
+    fireEvent.change(input, { target: { value: "what is TDD?" } });
 
-    const button = screen.getByRole("button", { name: "Send" });
+    const button = screen.getByLabelText("Send");
     fireEvent.click(button);
 
     expect(onSendMock).toHaveBeenCalledWith("what is TDD?");
@@ -61,50 +61,38 @@ describe("ChatInput", () => {
   it("should clear input after sending", () => {
     render(<ChatInput onSend={onSendMock} />);
 
-    const textarea = screen.getByPlaceholderText(
+    const input = screen.getByPlaceholderText(
       "Ask anything about your notes..."
     );
-    fireEvent.change(textarea, { target: { value: "test query" } });
+    fireEvent.change(input, { target: { value: "test query" } });
 
-    const button = screen.getByRole("button", { name: "Send" });
+    const button = screen.getByLabelText("Send");
     fireEvent.click(button);
 
-    expect((textarea as HTMLTextAreaElement).value).toBe("");
+    expect((input as HTMLInputElement).value).toBe("");
   });
 
   it("should emit onSend when Enter key is pressed", () => {
     render(<ChatInput onSend={onSendMock} />);
 
-    const textarea = screen.getByPlaceholderText(
+    const input = screen.getByPlaceholderText(
       "Ask anything about your notes..."
     );
-    fireEvent.change(textarea, { target: { value: "enter query" } });
-    fireEvent.keyDown(textarea, { key: "Enter", shiftKey: false });
+    fireEvent.change(input, { target: { value: "enter query" } });
+    fireEvent.keyDown(input, { key: "Enter" });
 
     expect(onSendMock).toHaveBeenCalledWith("enter query");
-  });
-
-  it("should NOT emit onSend when Shift+Enter is pressed", () => {
-    render(<ChatInput onSend={onSendMock} />);
-
-    const textarea = screen.getByPlaceholderText(
-      "Ask anything about your notes..."
-    );
-    fireEvent.change(textarea, { target: { value: "shift enter test" } });
-    fireEvent.keyDown(textarea, { key: "Enter", shiftKey: true });
-
-    expect(onSendMock).not.toHaveBeenCalled();
   });
 
   it("should clear input after sending via Enter key", () => {
     render(<ChatInput onSend={onSendMock} />);
 
-    const textarea = screen.getByPlaceholderText(
+    const input = screen.getByPlaceholderText(
       "Ask anything about your notes..."
     );
-    fireEvent.change(textarea, { target: { value: "enter send" } });
-    fireEvent.keyDown(textarea, { key: "Enter", shiftKey: false });
+    fireEvent.change(input, { target: { value: "enter send" } });
+    fireEvent.keyDown(input, { key: "Enter" });
 
-    expect((textarea as HTMLTextAreaElement).value).toBe("");
+    expect((input as HTMLInputElement).value).toBe("");
   });
 });

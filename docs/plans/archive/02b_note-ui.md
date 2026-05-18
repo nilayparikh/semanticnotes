@@ -1,7 +1,7 @@
 ---
 title: "Plan 02b — Note UI"
 plan_id: "02b_note-ui"
-status: "Complete"
+status: "Archived"
 author: "Planning Agent"
 created: "2026-05-12"
 updated: "2026-05-17"
@@ -13,8 +13,8 @@ depends_on: [02a_note-crud]
 depends_on_external: []
 phase: 2
 drift_of: null
-archived_date: null
-archive_log: null
+archived_date: "2026-05-18"
+archive_log: "docs/plans/logs/2026-05-18-02b_note-ui.md"
 ---
 
 > **Peer Review Note**: All 4 components are implemented. Improvements applied: (1) Sorted notes in `NoteList` memoized with `useMemo`, (2) ARIA attributes (`aria-selected`, `role="option"`) added for accessibility. ✅ Resolved.

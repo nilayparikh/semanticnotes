@@ -29,9 +29,9 @@ describe("AIChat", () => {
   it("should render chat interface", () => {
     render(<AIChat />);
 
-    expect(screen.getByText("AI Chat")).toBeDefined();
+    expect(screen.getByText("Local AI Q&A")).toBeDefined();
     expect(screen.getByPlaceholderText("Ask anything about your notes...")).toBeDefined();
-    expect(screen.getByText("Send")).toBeDefined();
+    expect(screen.getByLabelText("Send")).toBeDefined();
   });
 
   it("should render model selector", () => {
@@ -55,9 +55,9 @@ describe("AIChat", () => {
   it("should send message on Enter key", () => {
     render(<AIChat />);
 
-    const textarea = screen.getByLabelText("Chat message input");
-    fireEvent.change(textarea, { target: { value: "test query" } });
-    fireEvent.keyDown(textarea, { key: "Enter", shiftKey: false });
+    const input = screen.getByLabelText("Chat message input");
+    fireEvent.change(input, { target: { value: "test query" } });
+    fireEvent.keyDown(input, { key: "Enter" });
 
     expect(screen.getByText("test query")).toBeDefined();
   });

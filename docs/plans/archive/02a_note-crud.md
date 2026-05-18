@@ -1,7 +1,7 @@
 ---
 title: "Plan 02a — Note CRUD"
 plan_id: "02a_note-crud"
-status: "Complete"
+status: "Archived"
 author: "Planning Agent"
 created: "2026-05-12"
 updated: "2026-05-17"
@@ -13,8 +13,8 @@ depends_on: [01b_data-model-layer]
 depends_on_external: []
 phase: 2
 drift_of: null
-archived_date: null
-archive_log: null
+archived_date: "2026-05-18"
+archive_log: "docs/plans/logs/2026-05-18-02a_note-crud.md"
 ---
 
 > **Peer Review Note**: In-memory CRUD is complete. SQLite persistence is pending (depends on Plan 01b). Fixes applied: (1) `useEffect` cleanup added to `useNoteSaveDebounce`, (2) `note_version` incremented on `UPDATE_NOTE`. ✅ Resolved.

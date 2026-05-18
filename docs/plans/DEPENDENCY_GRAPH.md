@@ -4,7 +4,7 @@
 > Maintained by Planning Agent and Implementation Agent.
 > Archived plans are removed from this graph.
 
-**Last Updated**: 2026-05-17
+**Last Updated**: 2026-05-18
 
 ## Status Legend
 
@@ -38,7 +38,15 @@
 
 ## Drift Plans
 
-**All drift plans have been archived.** See `docs/plans/archive/drifts/` and `docs/plans/logs/` for records.
+| Plan ID                                         | Title                            | Status | Depends On                                                                                  | Story Points | Priority |
+| ----------------------------------------------- | -------------------------------- | ------ | ------------------------------------------------------------------------------------------- | ------------ | -------- |
+| drift-2026-05-17-full-flow-01_sqlite_storage    | Group 1: Wire SQLite Storage     | Draft  | —                                                                                           | 4            | Critical |
+| drift-2026-05-17-full-flow-02_semantic_search   | Group 2: Wire Semantic Search    | Draft  | Group 1                                                                                     | 3            | Critical |
+| drift-2026-05-17-full-flow-03_chat_rag          | Group 3: Wire Chat RAG           | Draft  | Group 1                                                                                     | 4            | Critical |
+| drift-2026-05-17-full-flow-04_loading_overlay   | Group 4: Startup Loading Overlay | Draft  | Group 1                                                                                     | 2            | High     |
+| drift-2026-05-17-full-flow-05_model_download    | Group 5: Model Download UI       | Draft  | Group 1                                                                                     | 3            | High     |
+| drift-2026-05-17-full-flow-06_right_panel       | Group 6: Polish Right Panel      | Draft  | Group 2, 3                                                                                  | 2            | Medium   |
+| drift-2026-05-18-11-24-01_real_note_search_flow | Real Note & Search Flow (E2E)    | Draft  | drift-2026-05-17-full-flow-01_sqlite_storage, drift-2026-05-17-full-flow-02_semantic_search | 8            | Critical |
 
 ---
 

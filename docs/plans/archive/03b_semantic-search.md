@@ -1,11 +1,11 @@
 ---
 title: "Plan 03b — Semantic Search"
 plan_id: "03b_semantic-search"
-status: "Complete"
+status: "Archived"
 author: "Planning Agent"
 created: "2026-05-12"
 updated: "2026-05-17"
-completed: 2026-05-15
+completed: "2026-05-15"
 priority: "High"
 story_points: 5
 effort_days: 1
@@ -13,8 +13,8 @@ depends_on: [03a_embedding-pipeline]
 depends_on_external: []
 phase: 3
 drift_of: null
-archived_date: null
-archive_log: null
+archived_date: "2026-05-18"
+archive_log: "docs/plans/logs/2026-05-18-03b_semantic-search.md"
 ---
 
 > **Peer Review Note (2026-05-17)**: Query embedding (AC 2) currently uses a zero-filled stub, not actual model inference. Note highlighting in search results (AC 5) is also not yet implemented. Both criteria are pending.

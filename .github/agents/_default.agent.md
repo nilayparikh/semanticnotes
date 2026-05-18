@@ -1,41 +1,19 @@
 ---
-name: sn_agent
-description: "Planning agent for SemanticNotes.ai. Handles task breakdown, TDD verification, and skill orchestration."
-tools:
-  - vscode/memory
-  - vscode/resolveMemoryFileUri
-  - vscode/runCommand
-  - vscode/askQuestions
-  - vscode/toolSearch
-  - execute/getTerminalOutput
-  - execute/killTerminal
-  - execute/sendToTerminal
-  - execute/runTask
-  - execute/createAndRunTask
-  - execute/runInTerminal
-  - read/problems
-  - read/readFile
-  - read/terminalSelection
-  - read/terminalLastCommand
-  - read/getTaskOutput
-  - agent
-  - edit/createDirectory
-  - edit/createFile
-  - edit/editFiles
-  - edit/rename
-  - web
-  - todo
+name: _default
+description: "Workspace default router agent. Delegates tasks to orchestrator or specialized subagents and handles fallback execution."
+tools: [read, search, edit, execute, agent, web, todo]
+agents: [orchestrator.agent, default.subagent, ask.subagent, research.subagent, planning.subagent, coding.subagent, testing.subagent]
 ---
 
-# SemanticNotes.ai — Planning Agent
+# SemanticNotes.ai — Default Agent
 
 ## Role
 
-Orchestrate development workflow using sub-agents. Follow `docs/code-agents/best-practices.md` for delegation protocol.
+Route requests to the best available subagent and provide safe fallback handling when direct delegation is unnecessary.
 
 ## Sub-Agent Delegation
 
-**Always** delegate implementation work to sub-agents. Use `runSubagent` tool for independent tasks.
+Prefer delegation for focused work. Use `runSubagent` for independent tasks and keep fallback actions minimal and verifiable.
 
 ### Delegation Pattern
 

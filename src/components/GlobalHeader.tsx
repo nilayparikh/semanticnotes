@@ -4,7 +4,9 @@ interface GlobalHeaderProps {
   webgpuActive?: boolean;
   sqliteConnected?: boolean;
   sqliteSize?: string;
+  sqliteStatus?: string;
   modelLoaded?: boolean;
+  modelStatus?: string;
   onSettingsClick?: () => void;
   onHelpClick?: () => void;
   onloadModel?: () => void;
@@ -14,7 +16,9 @@ export function GlobalHeader({
   webgpuActive = true,
   sqliteConnected = true,
   sqliteSize = "24MB",
+  sqliteStatus = "Ready",
   modelLoaded = false,
+  modelStatus = "Loading",
   onSettingsClick,
   onHelpClick,
   onloadModel,
@@ -46,19 +50,32 @@ export function GlobalHeader({
             </span>
           </div>
         )}
-        {sqliteConnected && (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary-fixed-dim/30 bg-primary-fixed-dim/10">
-            <span className="material-symbols-outlined text-[14px] text-primary-fixed-dim">
-              save
-            </span>
-            <span className="font-status-pill text-status-pill text-primary-fixed-dim">
-              SQLite Connected: {sqliteSize}
-            </span>
-          </div>
-        )}
+        <div
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary-fixed-dim/30 bg-primary-fixed-dim/10"
+          data-testid="sqlite-status"
+        >
+          <span className="material-symbols-outlined text-[14px] text-primary-fixed-dim">
+            save
+          </span>
+          <span className="font-status-pill text-status-pill text-primary-fixed-dim">
+            SQLite {sqliteStatus}{sqliteConnected ? `: ${sqliteSize}` : ""}
+          </span>
+        </div>
+
+        <div
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5"
+          data-testid="model-status"
+        >
+          <span className="material-symbols-outlined text-[14px] text-on-surface-variant">
+            memory
+          </span>
+          <span className="font-status-pill text-status-pill text-on-surface-variant">
+            Model {modelStatus}
+          </span>
+        </div>
 
         {/* Load Model Button (shown when model is not loaded) */}
-        {!modelLoaded && onloadModel && (
+        {!modelLoaded && modelStatus !== "Loading" && onloadModel && (
           <button
             type="button"
             onClick={onloadModel}

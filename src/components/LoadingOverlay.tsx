@@ -22,12 +22,12 @@ export function LoadingOverlay({
     }
   }, [visible]);
 
+  if (!visible) return null;
+
   return (
     <div
       role="status"
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center glass-panel transition-opacity duration-300 ${
-        visible ? "opacity-100" : "opacity-0"
-      }`}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center glass-panel transition-opacity duration-300 opacity-100 pointer-events-auto"
     >
       <div className="text-primary text-2xl font-geist mb-4">{message}</div>
       <div className="w-64 h-2 bg-white/20 rounded-full overflow-hidden">
