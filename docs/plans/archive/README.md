@@ -52,6 +52,15 @@ archive_reason: \"Completed\"
 
 | Plan ID                                      | Original Path                                               | Archived Date | Archive Log                                                                |
 | -------------------------------------------- | ----------------------------------------------------------- | ------------- | -------------------------------------------------------------------------- |
+| 00_project-setup                             | docs/plans/00_project-setup.md                                | 2026-05-18    | docs/plans/logs/2026-05-18-00_project-setup.md                             |
+| 01a_worker-runtime                           | docs/plans/01a_worker-runtime.md                                | 2026-05-18    | docs/plans/logs/2026-05-18-01a_worker-runtime.md                           |
+| 01b_data-model-layer                         | docs/plans/01b_data-model-layer.md                                | 2026-05-18    | docs/plans/logs/2026-05-18-01b_data-model-layer.md                          |
+| 02a_note-crud                                | docs/plans/02a_note-crud.md                                     | 2026-05-18    | docs/plans/logs/2026-05-18-02a_note-crud.md                               |
+| 02b_note-ui                                  | docs/plans/02b_note-ui.md                                       | 2026-05-18    | docs/plans/logs/2026-05-18-02b_note-ui.md                                  |
+| 03a_embedding-pipeline                       | docs/plans/03a_embedding-pipeline.md                                | 2026-05-18    | docs/plans/logs/2026-05-18-03a_embedding-pipeline.md                        |
+| 03b_semantic-search                          | docs/plans/03b_semantic-search.md                                 | 2026-05-18    | docs/plans/logs/2026-05-18-03b_semantic-search.md                          |
+| 04a_rag-pipeline                             | docs/plans/04a_rag-pipeline.md                                  | 2026-05-18    | docs/plans/logs/2026-05-18-04a_rag-pipeline.md                            |
+| 04b_chat-ui                                  | docs/plans/04b_chat-ui.md                                       | 2026-05-18    | docs/plans/logs/2026-05-18-04b_chat-ui.md                                  |
 | drift-2026-05-12-13-22-01_context_alignment  | docs/plans/drifts/2026-05-12-13-22/01_context_alignment.md  | 2026-05-15    | docs/plans/logs/2026-05-15-drift-2026-05-12-13-22-01_context_alignment.md  |
 | drift-2026-05-12-13-22-02_design_system      | docs/plans/drifts/2026-05-12-13-22/02_design_system.md      | 2026-05-15    | docs/plans/logs/2026-05-15-drift-2026-05-12-13-22-02_design_system.md      |
 | drift-2026-05-12-13-22-03_ui_theme           | docs/plans/drifts/2026-05-12-13-22/03_ui_theme.md           | 2026-05-15    | docs/plans/logs/2026-05-12-03_ui_theme.md                                  |

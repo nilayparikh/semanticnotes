@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { chunkText } from "@/utils/text-chunking";
+import { generateFallbackEmbedding } from "@/utils/fallbackEmbedding";
 import type { DbServiceInterface } from "@/types/database";
 import EmbeddingWorker from "@/workers/embedding.worker?worker";
 
@@ -27,6 +28,8 @@ interface UseEmbeddingPipelineReturn {
 const DEFAULT_DEBOUNCE_MS = 1500;
 const EMBEDDING_MODEL = "all-MiniLM-L6-v2";
 const EMBEDDING_DIM = 384;
+const FALLBACK_MODEL = "deterministic-semantic-fallback";
+const SHOULD_USE_BROWSER_FALLBACK = !import.meta.env.VITEST;
 
 export function useEmbeddingPipeline(
   options: UseEmbeddingPipelineOptions = {},
@@ -34,22 +37,45 @@ export function useEmbeddingPipeline(
   const { dbService, onEmbeddingComplete, debounceMs = DEFAULT_DEBOUNCE_MS } = options;
 
   const workerRef = useRef<Worker | null>(null);
+  const fallbackModeRef = useRef(false);
   const pendingRef = useRef<Set<string>>(new Set());
   const chunkTextRef = useRef<Map<string, string>>(new Map());
   const noteBatchRef = useRef<Map<string, number>>(new Map());
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const currentDebounceIdRef = useRef(0);
-  const lastResultRef = useRef<EmbeddingResult | undefined>(undefined);
 
   const [isEmbedding, setIsEmbedding] = useState(false);
   const [isModelReady, setIsModelReady] = useState(false);
   const [isModelLoading, setIsModelLoading] = useState(false);
   const [modelError, setModelError] = useState<string | null>(null);
+  const [lastResult, setLastResult] = useState<EmbeddingResult | undefined>(undefined);
+
+  const persistEmbedding = useCallback(
+    async (noteId: string, chunkIndex: number, chunk: string, embedding: Float32Array, modelVersion: string) => {
+      if (!dbService) return;
+
+      const embeddingBytes = new Uint8Array(embedding.buffer.slice(0));
+      await dbService.query(
+        `INSERT OR REPLACE INTO note_embeddings
+         (note_id, chunk_index, chunk_text, embedding, model_version, dim, updated_at, updated_ts)
+         VALUES (?, ?, ?, ?, ?, ?, datetime('now'), strftime('%s', 'now'))`,
+        [noteId, chunkIndex, chunk, embeddingBytes, modelVersion, EMBEDDING_DIM],
+      );
+    },
+    [dbService],
+  );
 
   // Initialize worker and model on mount
   useEffect(() => {
     const worker = new EmbeddingWorker();
     workerRef.current = worker;
+
+    const enableFallbackMode = () => {
+      fallbackModeRef.current = true;
+      setIsModelReady(true);
+      setIsModelLoading(false);
+      setModelError(null);
+    };
 
     const handleMessage = (e: MessageEvent) => {
       const { type } = e.data;
@@ -60,6 +86,10 @@ export function useEmbeddingPipeline(
           setModelError(null);
           break;
         case "MODEL_ERROR":
+          if (SHOULD_USE_BROWSER_FALLBACK) {
+            enableFallbackMode();
+            break;
+          }
           setIsModelReady(false);
           setIsModelLoading(false);
           setModelError(e.data.error?.message || "Model init failed");
@@ -84,17 +114,9 @@ export function useEmbeddingPipeline(
             setIsEmbedding(false);
           }
           // Store embedding in DB
-          if (dbService) {
-            const embeddingBytes = new Uint8Array(embeddings.buffer);
-            dbService.query(
-              `INSERT OR REPLACE INTO note_embeddings
-               (note_id, chunk_index, chunk_text, embedding, model_version, dim, updated_at, updated_ts)
-               VALUES (?, ?, ?, ?, ?, ?, datetime('now'), strftime('%s', 'now'))`,
-              [noteId, chunkIndex, chunkText, embeddingBytes, EMBEDDING_MODEL, EMBEDDING_DIM],
-            ).catch((err) => {
-              console.warn("useEmbeddingPipeline: failed to store embedding", err);
-            });
-          }
+          void persistEmbedding(noteId, chunkIndex, chunkText, embeddings, EMBEDDING_MODEL).catch((err) => {
+            console.warn("useEmbeddingPipeline: failed to store embedding", err);
+          });
           break;
         }
         case "EMBEDDING_ERROR": {
@@ -110,7 +132,14 @@ export function useEmbeddingPipeline(
       }
     };
 
+    const handleWorkerError = () => {
+      if (SHOULD_USE_BROWSER_FALLBACK) {
+        enableFallbackMode();
+      }
+    };
+
     worker.addEventListener("message", handleMessage);
+    worker.addEventListener("error", handleWorkerError);
 
     // Init model
     setIsModelLoading(true);
@@ -123,14 +152,15 @@ export function useEmbeddingPipeline(
 
     return () => {
       worker.removeEventListener("message", handleMessage);
+      worker.removeEventListener("error", handleWorkerError);
       worker.terminate();
       workerRef.current = null;
     };
-  }, [dbService]);
+  }, [persistEmbedding]);
 
   const embedNote = useCallback(
     (noteId: string, text: string) => {
-      if (!workerRef.current || !isModelReady) return;
+      if (!isModelReady) return;
 
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
@@ -161,8 +191,18 @@ export function useEmbeddingPipeline(
 
           setIsEmbedding(true);
 
+          const useFallbackMode = fallbackModeRef.current || !workerRef.current;
+
           for (const chunk of chunks) {
             const id = `${noteId}::${nextBatchId}::${chunk.index}`;
+            if (useFallbackMode) {
+              const embedding = generateFallbackEmbedding(chunk.text, EMBEDDING_DIM);
+              void persistEmbedding(noteId, chunk.index, chunk.text, embedding, FALLBACK_MODEL).catch((err) => {
+                console.warn("useEmbeddingPipeline: failed to store fallback embedding", err);
+              });
+              continue;
+            }
+
             pendingRef.current.add(id);
             chunkTextRef.current.set(id, chunk.text);
             workerRef.current!.postMessage({
@@ -172,17 +212,21 @@ export function useEmbeddingPipeline(
             });
           }
 
+          if (useFallbackMode) {
+            setIsEmbedding(false);
+          }
+
           const result: EmbeddingResult = {
             noteId,
             chunks: chunks.length,
-            modelVersion: EMBEDDING_MODEL,
+            modelVersion: useFallbackMode ? FALLBACK_MODEL : EMBEDDING_MODEL,
           };
-          lastResultRef.current = result;
+          setLastResult(result);
           onEmbeddingComplete?.(result);
         })();
       }, debounceMs);
     },
-    [dbService, debounceMs, isModelReady, onEmbeddingComplete],
+    [dbService, debounceMs, isModelReady, onEmbeddingComplete, persistEmbedding],
   );
 
   return {
@@ -191,6 +235,6 @@ export function useEmbeddingPipeline(
     isModelReady,
     isModelLoading,
     modelError,
-    lastResult: lastResultRef.current,
+    lastResult,
   };
 }

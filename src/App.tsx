@@ -1,9 +1,8 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useNoteManager } from "@/hooks/useNoteManager";
-import { useSemanticSearch, SemanticSearchResult } from "@/hooks/useSemanticSearch";
+import { useSemanticSearch } from "@/hooks/useSemanticSearch";
 import { useEmbeddingPipeline } from "@/hooks/useEmbeddingPipeline";
 import { useTheme } from "@/hooks/useTheme";
-import { useLoadingState } from "@/hooks/useLoadingState";
 import { DbService } from "@/hooks/useDbService";
 import { GlobalHeader } from "@/components/GlobalHeader";
 import { LoadingOverlay } from "@/components/LoadingOverlay";
@@ -94,42 +93,38 @@ function findRelatedNotes(currentNote: Note, allNotes: Note[]): Array<{ id: stri
 
 export default function App() {
   const sqliteWorker = useMemo(() => new SqliteWorker(), []);
-  const dbService = useRef(new DbService(sqliteWorker));
+  const dbServiceRef = useRef<DbService | null>(null);
+  if (!dbServiceRef.current) {
+    dbServiceRef.current = new DbService(sqliteWorker);
+  }
+  const dbService = dbServiceRef.current;
   const [isSqliteReady, setIsSqliteReady] = useState(false);
-
-  // Loading state orchestration
-  const { state, startComponent, readyComponent, errorComponent, hasError } = useLoadingState();
+  const [sqliteError, setSqliteError] = useState<string | null>(null);
 
   // Initialize DB service and mark components
   useEffect(() => {
-    // WebGPU detection is instant
-    startComponent("webgpu");
-    readyComponent("webgpu");
+    let cancelled = false;
 
-    startComponent("sqlite");
-    dbService.current.initialize();
-    dbService.current.ready
+    dbService.initialize();
+    dbService.ready
       .then(() => {
+        if (cancelled) return;
         setIsSqliteReady(true);
-        readyComponent("sqlite");
+        setSqliteError(null);
       })
       .catch((error) => {
+        if (cancelled) return;
         setIsSqliteReady(false);
-        errorComponent("sqlite", error instanceof Error ? error.message : "SQLite init failed");
+        setSqliteError(error instanceof Error ? error.message : "SQLite init failed");
       });
 
-    startComponent("llmWorker");
-    readyComponent("llmWorker");
-  }, [errorComponent, readyComponent, startComponent]);
-
-  // Cleanup worker on unmount
-  useEffect(() => {
     return () => {
+      cancelled = true;
       sqliteWorker.terminate();
     };
   }, [sqliteWorker]);
 
-  const { notes, selectedNote, createNote, updateNote, selectNote } = useNoteManager(dbService.current);
+  const { notes, selectedNote, createNote, updateNote, selectNote } = useNoteManager(dbService);
   const { theme, isDark } = useTheme();
   const webGpuScore = useMemo(() => detectWebGpu(), []);
 
@@ -140,7 +135,7 @@ export default function App() {
   const [searchResults, setSearchResults] = useState<Array<{ noteId: string; title: string; percentage: number }>>([]);
 
   // Semantic search hook (uses DB with BM25 fallback)
-  const semanticSearch = useSemanticSearch(dbService.current, webGpuScore);
+  const { search: runSemanticSearch } = useSemanticSearch(dbService, webGpuScore);
 
   // Embedding pipeline
   const {
@@ -151,31 +146,16 @@ export default function App() {
     modelError,
     lastResult,
   } = useEmbeddingPipeline({
-    dbService: dbService.current,
+    dbService,
     debounceMs: 1500,
   });
-
-  useEffect(() => {
-    if (modelError) {
-      errorComponent("embeddingWorker", modelError);
-      return;
-    }
-
-    if (isModelReady) {
-      readyComponent("embeddingWorker");
-      return;
-    }
-
-    if (isModelLoading) {
-      startComponent("embeddingWorker");
-    }
-  }, [errorComponent, isModelLoading, isModelReady, modelError, readyComponent, startComponent]);
 
   // Settings panel
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   // Model loaded state — driven by embedding pipeline
   const modelLoaded = isModelReady;
+  const hasError = Boolean(sqliteError || modelError);
   const modelStatus = modelError
     ? "Error"
     : isModelReady
@@ -183,7 +163,7 @@ export default function App() {
       : isModelLoading
         ? "Loading"
         : "Idle";
-  const sqliteStatus = state.sqlite === "error"
+  const sqliteStatus = sqliteError
     ? "Error"
     : isSqliteReady
       ? "Ready"
@@ -203,14 +183,14 @@ export default function App() {
   // Execute semantic search when debounced query changes
   useEffect(() => {
     if (!debouncedQuery.trim()) {
-      setSearchResults([]);
+      setSearchResults((current) => (current.length === 0 ? current : []));
       setIsSearching(false);
       return;
     }
     (async () => {
       setIsSearching(true);
       try {
-        const semanticHits = await semanticSearch.search(debouncedQuery);
+        const semanticHits = await runSemanticSearch(debouncedQuery);
         // Map semantic results to the display format
         const mappedResults = semanticHits
           .map((hit) => {
@@ -229,7 +209,7 @@ export default function App() {
         setIsSearching(false);
       }
     })();
-  }, [debouncedQuery, notes, semanticSearch]);
+  }, [debouncedQuery, notes, runSemanticSearch]);
 
   // Embed note content on change (debounced via hook)
   useEffect(() => {
@@ -305,16 +285,18 @@ export default function App() {
   }, [isEmbedding, lastResult?.noteId, modelError, selectedNote]);
 
   // Progress: percentage of components that are "ready" out of 4 total
-  const progress = useMemo(
-    () => Math.round((Object.values(state).filter((s) => s === "ready").length / 4) * 100),
-    [state],
-  );
+  const progress = useMemo(() => {
+    if (isSqliteReady && isModelReady) return 100;
+    if (isSqliteReady || isModelReady) return 75;
+    if (isModelLoading) return 50;
+    return 25;
+  }, [isModelLoading, isModelReady, isSqliteReady]);
 
   return (
     <div className="h-screen bg-background flex flex-col" data-testid="app-root">
       {/* Loading Overlay */}
       <LoadingOverlay
-        visible={!isSqliteReady}
+        visible={!isSqliteReady && !sqliteError}
         progress={progress}
         message={hasError ? "Initialization error — some features may be limited" : "Initializing SemanticNotes..."}
       />

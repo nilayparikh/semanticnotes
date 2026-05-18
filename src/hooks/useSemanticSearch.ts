@@ -5,10 +5,11 @@
  * Cross-compiled from `docs/architecture/04_embedding_pipeline_spec.md`.
  */
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import type { DbServiceInterface } from "@/types/database";
 import { searchVectors } from "@/utils/cosine-similarity";
 import { searchNotesFts5 } from "@/hooks/useBm25Fallback";
+import { generateFallbackEmbedding } from "@/utils/fallbackEmbedding";
 
 // ── Types ────────────────────────────────────────────────────────────────
 
@@ -55,7 +56,6 @@ export function useSemanticSearch(
 ) {
   const [isSearching, setIsSearching] = useState(false);
   const [results, setResults] = useState<SemanticSearchResult[]>([]);
-  const embeddingWorkerRef = useRef<Worker | null>(null);
 
   // Generate query embedding via cached embedder (or fallback to TF hash)
   const generateQueryEmbedding = useCallback(async (query: string): Promise<Float32Array> => {
@@ -68,22 +68,7 @@ export function useSemanticSearch(
         : new Float32Array(output.data);
       return embedding;
     } catch {
-      // Fallback: simple TF-based vector (deterministic hash of query words)
-      const fallback = new Float32Array(EMBEDDING_DIM);
-      const words = query.toLowerCase().split(/\s+/);
-      for (const word of words) {
-        let hash = 0;
-        for (let i = 0; i < word.length; i++) {
-          hash = ((hash << 5) - hash + word.charCodeAt(i)) | 0;
-        }
-        fallback[Math.abs(hash) % EMBEDDING_DIM] += 1;
-      }
-      // Normalize
-      const mag = Math.sqrt(fallback.reduce((s, v) => s + v * v, 0));
-      if (mag > 0) {
-        for (let i = 0; i < EMBEDDING_DIM; i++) fallback[i] /= mag;
-      }
-      return fallback;
+      return generateFallbackEmbedding(query, EMBEDDING_DIM);
     }
   }, []);
 
