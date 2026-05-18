@@ -1,7 +1,7 @@
 ---
 title: "Drift Plan 01 — Real Note & Search Flow (E2E)"
 plan_id: "drift-2026-05-18-11-24-01_real_note_search_flow"
-status: "Draft"
+status: "In Progress"
 author: "Default Subagent"
 created: "2026-05-18"
 updated: "2026-05-18"
@@ -56,14 +56,14 @@ Unit tests may remain stubbed where they already cover the logic; **E2E tests mu
 
 | #   | Criterion                                                | Verification Method | Status |
 | --- | -------------------------------------------------------- | ------------------- | ------ |
-| 1   | Creating a note in UI persists to SQLite/OPFS            | E2E Test            | `[ ]`  |
-| 2   | Editing a note updates the persisted record              | E2E Test            | `[ ]`  |
+| 1   | Creating a note in UI persists to SQLite/OPFS            | E2E Test            | `[x]`  |
+| 2   | Editing a note updates the persisted record              | E2E Test            | `[x]`  |
 | 3   | Deleting a note removes it from SQLite/OPFS              | E2E Test            | `[ ]`  |
-| 4   | BM25/FTS search returns results matching persisted notes | E2E Test            | `[ ]`  |
-| 5   | Embeddings are computed and stored as vectors            | E2E Test            | `[ ]`  |
-| 6   | Semantic search returns semantically similar notes       | E2E Test            | `[ ]`  |
-| 7   | Save/loading states are visible and queryable by E2E     | E2E Test            | `[ ]`  |
-| 8   | Notes survive full page reload (F5)                      | E2E Test            | `[ ]`  |
+| 4   | BM25/FTS search returns results matching persisted notes | E2E Test            | `[x]`  |
+| 5   | Embeddings are computed and stored as vectors            | E2E Test            | `[x]`  |
+| 6   | Semantic search returns semantically similar notes       | E2E Test            | `[x]`  |
+| 7   | Save/loading states are visible and queryable by E2E     | E2E Test            | `[x]`  |
+| 8   | Notes survive full page reload (F5)                      | E2E Test            | `[x]`  |
 
 > **Agent Note**: After implementation, run `npx vitest run tests/e2e --config vitest.config.ts --browser chrome --headless` to verify each criterion. Mark `[x]` only after evidence-based confirmation using `verification-before-completion` skill.
 

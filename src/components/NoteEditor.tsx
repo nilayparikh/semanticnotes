@@ -13,6 +13,8 @@ type SaveStatus = "Saved" | "Unsaved" | "Saving...";
 export default function NoteEditor({ note, onUpdate }: NoteEditorProps) {
   const timersRef = useRef<number[]>([]);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("Saved");
+  const [draftTitle, setDraftTitle] = useState(note.title);
+  const [draftContent, setDraftContent] = useState(note.content);
 
   // Clear timers on unmount
   useEffect(() => {
@@ -23,11 +25,13 @@ export default function NoteEditor({ note, onUpdate }: NoteEditorProps) {
 
   // Reset save status when note changes externally
   useEffect(() => {
+    setDraftTitle(note.title);
+    setDraftContent(note.content);
     setSaveStatus("Saved");
-  }, [note.id]);
+  }, [note.content, note.id, note.title]);
 
   const scheduleUpdate = useCallback(
-    (update: { title?: string; content?: string }) => {
+    (nextDraft: { title: string; content: string }) => {
       // Clear existing timers
       timersRef.current.forEach(clearTimeout);
       timersRef.current = [];
@@ -43,7 +47,7 @@ export default function NoteEditor({ note, onUpdate }: NoteEditorProps) {
 
       // Call onUpdate after 1000ms debounce, then show Saved
       const updateTimer = window.setTimeout(() => {
-        onUpdate(update);
+        onUpdate(nextDraft);
         setSaveStatus("Saved");
       }, DEBOUNCE_MS);
       timersRef.current.push(updateTimer);
@@ -53,15 +57,17 @@ export default function NoteEditor({ note, onUpdate }: NoteEditorProps) {
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
-    if (newTitle !== note.title) {
-      scheduleUpdate({ title: newTitle });
+    if (newTitle !== draftTitle) {
+      setDraftTitle(newTitle);
+      scheduleUpdate({ title: newTitle, content: draftContent });
     }
   };
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
-    if (newContent !== note.content) {
-      scheduleUpdate({ content: newContent });
+    if (newContent !== draftContent) {
+      setDraftContent(newContent);
+      scheduleUpdate({ title: draftTitle, content: newContent });
     }
   };
 
@@ -72,7 +78,7 @@ export default function NoteEditor({ note, onUpdate }: NoteEditorProps) {
         <input
           type="text"
           className="font-headline-md text-headline-md text-on-surface font-bold bg-transparent border-0 focus:ring-0 w-full"
-          value={note.title}
+          value={draftTitle}
           placeholder="Untitled"
           onChange={handleTitleChange}
           data-testid="note-title-input"
@@ -97,7 +103,7 @@ export default function NoteEditor({ note, onUpdate }: NoteEditorProps) {
             className="w-full h-full bg-transparent border-0 resize-none font-code-editor text-code-editor text-on-surface focus:ring-0 placeholder:text-on-surface-variant/30 leading-relaxed"
             placeholder="Start typing your note..."
             spellCheck={false}
-            value={note.content}
+            value={draftContent}
             onChange={handleContentChange}
             data-testid="note-content-textarea"
           />
@@ -113,7 +119,7 @@ export default function NoteEditor({ note, onUpdate }: NoteEditorProps) {
 
       {/* Markdown Preview */}
       <div className="flex-[0.8] p-8 overflow-y-auto bg-surface-container-low/30 prose prose-invert prose-p:text-body-base prose-headings:font-headline-md prose-code:font-code-editor prose-a:text-primary-fixed-dim max-w-none">
-        <MarkdownPreview content={note.content} />
+        <MarkdownPreview content={draftContent} />
       </div>
     </div>
   );

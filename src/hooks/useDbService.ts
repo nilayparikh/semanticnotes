@@ -265,13 +265,13 @@ export class DbService implements DbServiceInterface {
   #ready: Promise<void>;
   #resolveReady!: () => void;
   #rejectReady!: (reason: Error) => void;
-  #worker: DedicatedWorker;
+  #worker: Worker;
   #initialized: boolean = false;
   #fallback: BrowserFallbackDbService | null = null;
   #fallbackTimer: ReturnType<typeof setTimeout> | null = null;
   #readySettled: boolean = false;
 
-  constructor(worker: DedicatedWorker) {
+  constructor(worker: Worker) {
     this.#worker = worker;
     this.#ready = new Promise((resolve, reject) => {
       this.#resolveReady = () => {
@@ -321,7 +321,7 @@ export class DbService implements DbServiceInterface {
   }
 
   /** Initialize the database by mounting the OPFS file. */
-  initialize(): void {
+  async initialize(): Promise<void> {
     if (this.#initialized) return;
     this.#initialized = true;
 
@@ -371,13 +371,13 @@ export class DbService implements DbServiceInterface {
 
 // ── Hook ─────────────────────────────────────────────────────────────────
 
-export function useDbService(worker: DedicatedWorker) {
+export function useDbService(worker: Worker) {
   const dbRef = useRef<DbService | null>(null);
 
   useEffect(() => {
     if (!dbRef.current) {
       dbRef.current = new DbService(worker);
-      dbRef.current.initialize();
+      void dbRef.current.initialize();
     }
 
     return () => {

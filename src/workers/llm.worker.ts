@@ -19,7 +19,7 @@ self.onmessage = async (e: MessageEvent) => {
         generator = await pipeline("text-generation", e.data.model, {
           dtype: e.data.dtype || "q4",
           device: e.data.device || "webgpu",
-        });
+        } as any);
         self.postMessage({ type: "MODEL_READY" });
       } catch (error: any) {
         self.postMessage({

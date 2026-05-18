@@ -39,6 +39,7 @@ describe("NoteEditor", () => {
     // Wait for debounce to fire
     return waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
+        title: "Sample Note",
         content: "New Content",
       });
     });
@@ -82,7 +83,7 @@ describe("NoteEditor", () => {
     // Advance 1000ms
     act(() => vi.advanceTimersByTime(1000));
 
-    expect(onUpdate).toHaveBeenCalledWith({ content: "New Content" });
+    expect(onUpdate).toHaveBeenCalledWith({ title: "Sample Note", content: "New Content" });
 
     vi.useRealTimers();
   });
@@ -104,7 +105,7 @@ describe("NoteEditor", () => {
 
     // Should only call with final value
     expect(onUpdate).toHaveBeenCalledTimes(1);
-    expect(onUpdate).toHaveBeenCalledWith({ content: "Second" });
+    expect(onUpdate).toHaveBeenCalledWith({ title: "Sample Note", content: "Second" });
 
     vi.useRealTimers();
   });
@@ -175,7 +176,33 @@ describe("NoteEditor", () => {
 
     act(() => vi.advanceTimersByTime(1000));
 
-    expect(onUpdate).toHaveBeenCalledWith({ title: "New Title" });
+    expect(onUpdate).toHaveBeenCalledWith({ title: "New Title", content: "# Hello\n\nSome content here." });
+
+    vi.useRealTimers();
+  });
+
+  it("keeps title and content together when both are edited before debounce completes", () => {
+    vi.useFakeTimers();
+    const note = makeNote();
+    const onUpdate = vi.fn();
+
+    render(<NoteEditor note={note} onUpdate={onUpdate} />);
+
+    fireEvent.change(screen.getByDisplayValue("Sample Note"), {
+      target: { value: "Road Trip Draft" },
+    });
+    act(() => vi.advanceTimersByTime(400));
+    fireEvent.change(screen.getByTestId("note-content-textarea" as never), {
+      target: { value: "Travel notes" },
+    });
+
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    expect(onUpdate).toHaveBeenCalledWith({
+      title: "Road Trip Draft",
+      content: "Travel notes",
+    });
 
     vi.useRealTimers();
   });

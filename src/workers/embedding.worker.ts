@@ -31,7 +31,7 @@ self.onmessage = async (e: MessageEvent) => {
 
         for (const options of attempts) {
           try {
-            embedder = await pipeline("feature-extraction", e.data.model, options);
+            embedder = await pipeline("feature-extraction", e.data.model, options as any);
             self.postMessage({ type: "MODEL_READY", device: options.device || "auto" });
             return;
           } catch (error: any) {
@@ -64,10 +64,7 @@ self.onmessage = async (e: MessageEvent) => {
           ? output.data
           : new Float32Array(output.data);
 
-        self.postMessage(
-          { type: "EMBEDDING_READY", id, embeddings },
-          [embeddings.buffer],
-        );
+        self.postMessage({ type: "EMBEDDING_READY", id, embeddings });
       } catch (error: any) {
         self.postMessage({
           type: "EMBEDDING_ERROR",

@@ -16,7 +16,7 @@ import {
   INDEXES_SQL,
 } from "@/types/database";
 
-let sqlite3: SQLite.SQLiteAPI | null = null;
+let sqlite3: any | null = null;
 let dbPtr: number = 0;
 
 class WorkerIndexedDbVFS extends IDBMinimalVFS {
@@ -29,7 +29,7 @@ class WorkerIndexedDbVFS extends IDBMinimalVFS {
   }
 }
 
-async function initDb(): Promise<{ sqlite3: SQLite.SQLiteAPI; db: number }> {
+async function initDb(): Promise<{ sqlite3: any; db: number }> {
   if (sqlite3 && dbPtr) {
     return { sqlite3, db: dbPtr };
   }
@@ -40,7 +40,7 @@ async function initDb(): Promise<{ sqlite3: SQLite.SQLiteAPI; db: number }> {
   try {
     const vfs = new WorkerIndexedDbVFS();
     sqlite3.vfs_register(vfs, true);
-    dbPtr = await sqlite3.open_v2("semanticnotes.db", undefined, vfs.name);
+    dbPtr = await sqlite3.open_v2("semanticnotes.db", undefined, (vfs as { name?: string }).name);
   } catch {
     dbPtr = await sqlite3.open_v2("semanticnotes.db");
   }

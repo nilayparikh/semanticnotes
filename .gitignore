@@ -62,3 +62,4 @@ coverage/
 
 # .archive files (keep for reference, but ignore in version control)
 .archive/
+docs/review/assets/

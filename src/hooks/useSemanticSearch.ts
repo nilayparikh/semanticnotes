@@ -33,7 +33,7 @@ async function getEmbedder() {
   if (!embedderPromise) {
     embedderPromise = (async () => {
       const { pipeline } = await import("@xenova/transformers");
-      return pipeline("feature-extraction", EMBEDDING_MODEL, { dtype: "float16" });
+      return pipeline("feature-extraction", EMBEDDING_MODEL, { dtype: "float16" } as any);
     })();
   }
   return embedderPromise;

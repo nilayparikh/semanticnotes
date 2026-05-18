@@ -64,7 +64,7 @@ export function useRagPipeline() {
 
       // Step 2: Search vectors
       const vectors = notes.map(n => ({
-        noteId: parseInt(n.id, 10) || 0,
+        noteId: String(n.id),
         chunkIndex: 0,
         embedding: n.embedding,
       }));

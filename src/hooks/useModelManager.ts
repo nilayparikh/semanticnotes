@@ -37,12 +37,12 @@ export class ModelManager {
     try {
       const { pipeline } = await import("@xenova/transformers");
       this.#embeddingPipeline = await pipeline(
-        DEFAULT_MODEL_CONFIG.embeddingModel.task,
+        DEFAULT_MODEL_CONFIG.embeddingModel.task as any,
         DEFAULT_MODEL_CONFIG.embeddingModel.path,
         {
           dtype: DEFAULT_MODEL_CONFIG.embeddingModel.dtype,
           device: DEFAULT_MODEL_CONFIG.embeddingModel.device,
-        },
+        } as any,
       );
       this.#embeddingState = "ready";
       return this.#embeddingPipeline;
@@ -70,12 +70,12 @@ export class ModelManager {
     try {
       const { pipeline } = await import("@xenova/transformers");
       this.#llmPipeline = await pipeline(
-        DEFAULT_MODEL_CONFIG.llmModel.task,
+        DEFAULT_MODEL_CONFIG.llmModel.task as any,
         DEFAULT_MODEL_CONFIG.llmModel.path,
         {
           dtype: DEFAULT_MODEL_CONFIG.llmModel.dtype,
           device: DEFAULT_MODEL_CONFIG.llmModel.device,
-        },
+        } as any,
       );
       this.#llmState = "ready";
       return this.#llmPipeline;
